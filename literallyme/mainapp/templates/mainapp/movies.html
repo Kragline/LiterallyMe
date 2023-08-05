@@ -1,0 +1,22 @@
+{% extends 'mainapp/base.html' %}
+{% load mainapp_tags %}
+
+{% block content %}
+    <h1>{{ title }}</h1>
+
+    {% for movie in movies %}
+        <div class="movie alert alert-success" role="alert">
+            {% if movie.poster %}
+                <img src="{{ movie.poster.url }}" height="300" alt="movi.title">
+            {% endif %}
+            <h2><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h2>
+            <p>{{ movie.plot|linebreaks|truncatewords:25 }}</p>
+            <p><b>Release date:</b> {{ movie.release_date }}</p>
+            <p><b>Cast:</b> {% get_movies_actors movie=movie %}</p>
+<!--            {% for actor in movie.actors.all %}-->
+<!--                <p><a href="{{ actor.get_absolute_url }}">{{ actor.name }}</a></p>-->
+<!--            {% endfor %}-->
+        </div>
+    {% endfor %}
+
+{% endblock %}
