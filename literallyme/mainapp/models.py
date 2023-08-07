@@ -15,7 +15,7 @@ class Actor(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('actor', kwargs={'actor_slug': self.slug})
+        return reverse('about_actor', kwargs={'actor_slug': self.slug})
 
     class Meta:
         verbose_name = 'Actors (they are literally me)'
@@ -55,7 +55,7 @@ class Movie(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('movie_details', kwargs={'movie_slug': self.slug})
+        return reverse('about_movie', kwargs={'movie_slug': self.slug})
 
     class Meta:
         verbose_name = 'Movies (literally me)'

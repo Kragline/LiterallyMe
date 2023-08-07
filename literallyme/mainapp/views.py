@@ -1,9 +1,11 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect, get_object_or_404
+
 from .models import *
+from .forms import *
 
 
-def index(request):
+def actors_list(request):
     actors = Actor.objects.all()
 
     context = {
@@ -11,22 +13,7 @@ def index(request):
         'title': 'Literally me - Main'
     }
 
-    return render(request, 'mainapp/index.html', context=context)
-
-
-def add_actor(request):
-    return HttpResponse('<h1>Add actor page</h1>')
-
-
-def login(request):
-    return HttpResponse('<h1>Login page</h1>')
-
-def about(request):
-    context = {
-        'title': 'Literally me - About'
-    }
-
-    return render(request, 'mainapp/about.html', context=context)
+    return render(request, 'mainapp/actor/actors_list.html', context=context)
 
 
 def about_actor(request, actor_slug):
@@ -36,17 +23,33 @@ def about_actor(request, actor_slug):
         'title': 'About ' + actor.name
     }
 
-    return render(request, 'mainapp/about_actor.html', context=context)
+    return render(request, 'mainapp/actor/about_actor.html', context=context)
 
 
-def movies(request):
+def add_actor(request):
+    if request.POST:
+        form = AddActorForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = AddActorForm()
+
+    context = {
+        'form': form,
+        'title': 'Add actor'
+    }
+    return render(request, 'mainapp/actor/add_actor.html', context)
+
+
+def movies_list(request):
     movies = Movie.objects.all()
     context = {
         'movies': movies,
         'title': 'Literalle me movies'
     }
 
-    return render(request, 'mainapp/movies.html', context=context)
+    return render(request, 'mainapp/movie/movies_list.html', context=context)
 
 
 def about_movie(request, movie_slug):
@@ -56,7 +59,24 @@ def about_movie(request, movie_slug):
         'title': 'About ' + movie.title
     }
 
-    return render(request, 'mainapp/about_movie.html', context=context)
+    return render(request, 'mainapp/movie/about_movie.html', context=context)
+
+
+def add_movie(request):
+    if request.POST:
+        form = AddMovieForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = AddMovieForm()
+
+    context = {
+        'form': form,
+        'title': 'Add movie'
+    }
+
+    return render(request, 'mainapp/movie/add_movie.html', context=context)
 
 
 def show_category(request, category_slug):
@@ -70,7 +90,25 @@ def show_category(request, category_slug):
         'title': 'About ' + category_slug.capitalize()
     }
 
-    return render(request, 'mainapp/show_category.html', context=context)
+    return render(request, 'mainapp/category/show_category.html', context=context)
+
+
+def add_category(request):
+    if request.POST:
+        form = AddCategoryForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+    else:
+        form = AddCategoryForm()
+
+    context = {
+        'form': form,
+        'title': 'Add category'
+    }
+
+    return render(request, 'mainapp/category/add_category.html', context=context)
+
 
 # works only if DEBUG in settings.py is False
 # and ALLOWED_HOSTS is ['127.0.0.1'] for example
