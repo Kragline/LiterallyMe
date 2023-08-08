@@ -7,7 +7,7 @@
     {% for movie in movies %}
         <div class="movie alert alert-success" role="alert">
             {% if movie.poster %}
-                <img src="{{ movie.poster.url }}" height="300" alt="movi.title">
+                <img src="{{ movie.poster.url }}" width="250" alt="movi.title">
             {% endif %}
             <h2><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h2>
             <p>{{ movie.plot|linebreaks|truncatewords:25 }}</p>

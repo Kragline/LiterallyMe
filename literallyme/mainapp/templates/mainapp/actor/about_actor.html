@@ -6,7 +6,7 @@
 
     <div class="alert alert-primary post" role="alert">
         {% if actor.photo %}
-            <img src="{{ actor.photo.url }}" height="400" alt="actor.name">
+            <img src="{{ actor.photo.url }}" width="300" alt="actor.name">
         {% endif %}
         <h2><a href="{{ actor.get_absolute_url }}">{{ actor.name }}</a></h2>
         <p>{{ actor.bio|linebreaks }}</p>

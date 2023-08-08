@@ -2,18 +2,19 @@ from django import forms
 from .models import *
 
 
-name_attrs = {'type': 'text','class': 'form-control', 'placeholder': 'Actor name'}
-bio_attrs = {'type': 'text','class': 'form-control', 'cols': 70, 'placeholder': 'Actor bio'}
-slug_attrs = {'type': 'text','class': 'form-control', 'placeholder': 'Slug for URL'}
-photo_attrs = {'type': 'file','class': 'form-control'}
+name_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Actor name'}
+bio_attrs = {'type': 'text', 'class': 'form-control', 'cols': 70, 'placeholder': 'Actor bio'}
+slug_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Slug for URL'}
+photo_attrs = {'type': 'file', 'class': 'form-control'}
 
-title_attrs = {'type': 'text','class': 'form-control', 'placeholder': 'Movie title'}
-plot_attrs = {'type': 'text','class': 'form-control', 'cols': 70, 'placeholder': 'Actor bio'}
-release_date_attrs = {'type': 'text','class': 'form-control', 'placeholder': 'Release date'}
-poster_attrs = {'type': 'file','class': 'form-control'}
+title_attrs = name_attrs
+name_attrs['placeholder'] = 'Movie name'
+plot_attrs = bio_attrs
+plot_attrs['placeholder'] = 'Movie plot'
+release_date_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Release date'}
 select_attrs = {'class': 'form-select'}
 
-category_name_attrs = {'type': 'text','class': 'form-control', 'placeholder': 'Category name'}
+category_name_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Category name'}
 
 
 class AddActorForm(forms.ModelForm):
@@ -43,7 +44,7 @@ class AddMovieForm(forms.ModelForm):
             'title': forms.TextInput(attrs=title_attrs),
             'plot': forms.Textarea(attrs=plot_attrs),
             'release_date': forms.TextInput(attrs=release_date_attrs),
-            'poster': forms.FileInput(attrs=poster_attrs),
+            'poster': forms.FileInput(attrs=photo_attrs),
             'slug': forms.TextInput(attrs=slug_attrs),
             'actors': forms.SelectMultiple(attrs=select_attrs),
             'category': forms.Select(attrs=select_attrs)

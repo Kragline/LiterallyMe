@@ -21,8 +21,6 @@ class Actor(models.Model):
         verbose_name = 'Actors (they are literally me)'
         verbose_name_plural = 'Actors (they are literally me)'
 
-        ordering = ['create_time', 'name']
-
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
@@ -37,8 +35,6 @@ class Category(models.Model):
     class Meta:
         verbose_name = 'Categories (literally me)'
         verbose_name_plural = 'Categories (literally me)'
-
-        ordering = ['id']
 
 
 class Movie(models.Model):
@@ -61,4 +57,4 @@ class Movie(models.Model):
         verbose_name = 'Movies (literally me)'
         verbose_name_plural = 'Movies (literally me)'
 
-        ordering = ['create_time', 'title']
+        ordering = ['-create_time']
