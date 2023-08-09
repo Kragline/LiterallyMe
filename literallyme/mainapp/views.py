@@ -19,6 +19,9 @@ class ActorsListView(DataMixin, ListView):
 
         return dict(list(context.items()) + list(mixin_context.items()))
 
+    def get_queryset(self):
+        return Actor.objects.order_by('create_time')
+
 
 class AboutActorView(DataMixin, DetailView):
     model = Actor
@@ -59,6 +62,9 @@ class MovieListView(DataMixin, ListView):
 
         return dict(list(context.items()) + list(mixin_context.items()))
 
+    def get_queryset(self):
+        return Movie.objects.order_by('create_time')
+
 
 class AboutMovieView(DataMixin, DetailView):
     model = Movie
@@ -98,7 +104,7 @@ class CategoryListView(DataMixin, ListView):
         return dict(list(context.items()) + list(mixin_context.items()))
 
     def get_queryset(self):
-        return Movie.objects.filter(category__slug=self.kwargs['category_slug']) # getting clug of url from self.kwargs dictionary
+        return Movie.objects.filter(category__slug=self.kwargs['category_slug']).order_by('create_time') # getting clug of url from self.kwargs dictionary
 
 
 class AddCategoryView(LoginRequiredMixin, DataMixin, CreateView):

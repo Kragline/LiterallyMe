@@ -11,6 +11,8 @@ menu = [
 
 
 class DataMixin:
+    paginate_by = 5
+
     def get_user_context(self, **kwargs):
         categories = Category.objects.annotate(movies_count=Count('movies')) # creating new column called movies_count
 

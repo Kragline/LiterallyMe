@@ -56,5 +56,3 @@ class Movie(models.Model):
     class Meta:
         verbose_name = 'Movies (literally me)'
         verbose_name_plural = 'Movies (literally me)'
-
-        ordering = ['-create_time']
