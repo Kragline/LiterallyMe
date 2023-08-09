@@ -7,9 +7,8 @@ bio_attrs = {'type': 'text', 'class': 'form-control', 'cols': 70, 'placeholder':
 slug_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Slug for URL'}
 photo_attrs = {'type': 'file', 'class': 'form-control'}
 
-title_attrs = name_attrs
-name_attrs['placeholder'] = 'Movie name'
-plot_attrs = bio_attrs
+title_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Movie name'}
+plot_attrs = {'type': 'text', 'class': 'form-control', 'cols': 70, 'placeholder': 'Movie plot'}
 plot_attrs['placeholder'] = 'Movie plot'
 release_date_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Release date'}
 select_attrs = {'class': 'form-select'}

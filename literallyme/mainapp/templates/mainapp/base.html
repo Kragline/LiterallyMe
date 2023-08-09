@@ -1,7 +1,4 @@
 {% load static %}
-<!--loading and saving tag in variable-->
-{% load mainapp_tags %}
-{% get_categories sort='name' as categories %}
 
 <html lang="en">
 <head>
@@ -21,25 +18,20 @@
                     <div class="collapse navbar-collapse" id="navbarTogglerDemo01">
                             <a class="navbar-brand" href="{% url 'home' %}">Literally me</a>
                             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                                <li class="nav-item">
-                                    <a class="nav-link active" aria-current="page" href="{% url 'movies' %}">Movies</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" aria-current="page" href="{% url 'add_actor' %}">Add actor</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" aria-current="page" href="{% url 'add_category' %}">Add category</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" aria-current="page" href="{% url 'add_movie' %}">Add movie</a>
-                                </li>
+                                {% for item in menu %}
+                                    <li class="nav-item">
+                                        <a class="nav-link active" aria-current="page" href="{% url item.url_name %}">{{ item.title }}</a>
+                                    </li>
+                                {% endfor %}
                                 <li class="nav-item dropdown">
                                      <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         Categories
                                      </a>
                                      <ul class="dropdown-menu">
                                          {% for category in categories %}
-                                            <li><a class="dropdown-item" href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+                                            {% if category.movies_count > 0 %}
+                                                <li><a class="dropdown-item" href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
+                                            {% endif %}
                                          {% endfor %}
                                      </ul>
                                 </li>

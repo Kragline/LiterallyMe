@@ -1,45 +1,26 @@
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import *
 from .forms import *
+from .utils import *
 
 
-# def actors_list(request):
-#     actors = Actor.objects.all()
-#
-#     context = {
-#         'actors': actors,
-#         'title': 'Literally me - Main'
-#     }
-#
-#     return render(request, 'mainapp/actor/actors_list.html', context=context)
-
-
-class ActorsListView(ListView):
+class ActorsListView(DataMixin, ListView):
     model = Actor
     template_name = 'mainapp/actor/actors_list.html'
     context_object_name = 'actors'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Literally me - Main'
+        mixin_context = self.get_user_context(title='Literally me - Main')
 
-        return context
-
-
-# def about_actor(request, actor_slug):
-#     actor = get_object_or_404(Actor, slug=actor_slug)
-#     context = {
-#         'actor': actor,
-#         'title': 'About ' + actor.name
-#     }
-#
-#     return render(request, 'mainapp/actor/about_actor.html', context=context)
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class AboutActorView(DetailView):
+class AboutActorView(DataMixin, DetailView):
     model = Actor
     template_name = 'mainapp/actor/about_actor.html'
     context_object_name = 'actor'
@@ -47,72 +28,39 @@ class AboutActorView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'About ' + str(context['actor'].name)
+        mixin_context = self.get_user_context(title='About ' + str(context['actor'].name))
 
-        return context
-
-
-# def add_actor(request):
-#     if request.POST:
-#         form = AddActorForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('home')
-#     else:
-#         form = AddActorForm()
-#
-#     context = {
-#         'form': form,
-#         'title': 'Add actor'
-#     }
-#     return render(request, 'mainapp/actor/add_actor.html', context)
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class AddActorView(CreateView):
+class AddActorView(LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddActorForm
     template_name = 'mainapp/actor/add_actor.html'
     context_object_name = 'form'
+    login_url = reverse_lazy('home')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Add actor'
+        mixin_context = self.get_user_context(title='Add actor')
+
+        return dict(list(context.items()) + list(mixin_context.items()))
 
         return context
 
 
-# def movies_list(request):
-#     movies = Movie.objects.all()
-#     context = {
-#         'movies': movies,
-#         'title': 'Literalle me movies'
-#     }
-#
-#     return render(request, 'mainapp/movie/movies_list.html', context=context)
-
-
-class MovieListView(ListView):
+class MovieListView(DataMixin, ListView):
     model = Movie
     template_name = 'mainapp/movie/movies_list.html'
     context_object_name = 'movies'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Literalle me movies'
+        mixin_context = self.get_user_context(title='Literally me movies')
 
-        return context
-
-
-# def about_movie(request, movie_slug):
-#     movie = get_object_or_404(Movie, slug=movie_slug)
-#     context = {
-#         'movie': movie,
-#         'title': 'About ' + movie.title
-#     }
-#
-#     return render(request, 'mainapp/movie/about_movie.html', context=context)
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class AboutMovieView(DetailView):
+class AboutMovieView(DataMixin, DetailView):
     model = Movie
     template_name = 'mainapp/movie/about_movie.html'
     context_object_name = 'movie'
@@ -120,102 +68,50 @@ class AboutMovieView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'About ' + context['movie'].title
+        mixin_context = self.get_user_context(title='About ' + context['movie'].title)
 
-        return context
-
-
-# def add_movie(request):
-#     if request.POST:
-#         form = AddMovieForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('home')
-#     else:
-#         form = AddMovieForm()
-#
-#     context = {
-#         'form': form,
-#         'title': 'Add movie'
-#     }
-#
-#     return render(request, 'mainapp/movie/add_movie.html', context=context)
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class AddMovieView(CreateView):
+class AddMovieView(LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddMovieForm
     template_name = 'mainapp/movie/add_movie.html'
     context_object_name = 'form'
+    login_url = reverse_lazy('home')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Add movie'
+        mixin_context = self.get_user_context(title='Add movie')
 
-        return context
-
-
-# def show_category(request, category_slug):
-#     category = Category.objects.get(slug=category_slug)
-#     category_pk = category.pk
-#     movies_category = Category.objects.get(pk=category_pk)
-#     movies = Movie.objects.filter(category=movies_category)
-#
-#     if len(movies) == 0:
-#         raise Http404()
-#
-#     context = {
-#         'movies': movies,
-#         'title': 'About ' + movies[0].category.name
-#     }
-#
-#     return render(request, 'mainapp/category/show_category.html', context=context)
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
-class CategoryListView(ListView):
+class CategoryListView(DataMixin, ListView):
     model = Movie
     template_name = 'mainapp/category/show_category.html'
     context_object_name = 'movies'
-    allow_empty = False
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Category ' + str(context['movies'][0].category.name)
+        mixin_context = self.get_user_context(title='Category ' + context['movies'][0].category.name)
 
-        return context
+        return dict(list(context.items()) + list(mixin_context.items()))
 
     def get_queryset(self):
-        # category field (which is basicly the link to category model) in movies + slug field in categories = category__slug
-        # show_category filtering code will work too, but need to repleace category_slug with self.kwargs['category_slug']
         return Movie.objects.filter(category__slug=self.kwargs['category_slug']) # getting clug of url from self.kwargs dictionary
 
 
-# def add_category(request):
-#     if request.POST:
-#         form = AddCategoryForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('home')
-#     else:
-#         form = AddCategoryForm()
-#
-#     context = {
-#         'form': form,
-#         'title': 'Add category'
-#     }
-#
-#     return render(request, 'mainapp/category/add_category.html', context=context)
-
-
-class AddCategoryView(CreateView):
+class AddCategoryView(LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddCategoryForm
     template_name = 'mainapp/category/add_category.html'
     context_object_name = 'form'
+    login_url = reverse_lazy('home')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Add category'
+        mixin_context = self.get_user_context(title='Add category')
 
-        return context
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
 # works only if DEBUG in settings.py is False
