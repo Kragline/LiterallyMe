@@ -7,7 +7,8 @@ from literallyme import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('', include('mainapp.urls'))
+    path('', include('mainapp.urls')),
+    path('', include('authentication.urls'))
 ]
 
 # only for local server
