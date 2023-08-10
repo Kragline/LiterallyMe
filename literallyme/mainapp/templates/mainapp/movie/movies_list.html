@@ -10,7 +10,7 @@
                 <img src="{{ movie.poster.url }}" width="250" alt="movi.title">
             {% endif %}
             <h2><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h2>
-            <p>{{ movie.plot|truncatewords:30 }}</p>
+            <p>{{ movie.plot|truncatewords:50 }}</p>
             <p><b>Release date:</b> {{ movie.release_date }}</p>
             <p><b>Cast:</b> {% get_movies_actors movie=movie %}</p>
         </div>

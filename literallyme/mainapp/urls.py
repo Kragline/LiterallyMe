@@ -10,5 +10,8 @@ urlpatterns = [
     path('add_movie', AddMovieView.as_view(), name='add_movie'),
     path('movies/<slug:movie_slug>/', AboutMovieView.as_view(), name='about_movie'),
     path('movies/categories/<slug:category_slug>/', CategoryListView.as_view(), name='category'),
-    path('add_category', AddCategoryView.as_view(), name='add_category')
+    path('add_category/', AddCategoryView.as_view(), name='add_category'),
+    path('login/', LoginUserView.as_view(), name='login'),
+    path('register/', RegisterUserView.as_view(), name='register'),
+    path('logout/', logout_user, name='logout')
 ]
