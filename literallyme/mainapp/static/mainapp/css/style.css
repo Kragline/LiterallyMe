@@ -1,3 +1,9 @@
 .content {
-    width: 60%px;
+    width: 60%;
+    margin: 0 auto;
+}
+
+.pagination {
+    width: 60%;
+    margin: 0 auto;
 }
