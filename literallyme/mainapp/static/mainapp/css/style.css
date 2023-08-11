@@ -1,5 +1,5 @@
 .content {
-    width: 60%;
+    max-width: 60%;
     margin: 0 auto;
 }
 
@@ -7,4 +7,92 @@
     width: 60%;
     margin-left: auto;
     margin-right: auto;
+}
+
+.actor-link {
+    text-decoration: none;
+    color: rgb(45, 107, 189);
+}
+
+.actor-bold {
+    color: rgb(38, 86, 150);
+}
+
+.movie-link {
+    text-decoration: none;
+    color: rgb(39, 151, 39);
+}
+
+.movie-bold {
+    color: rgb(32, 119, 32);
+}
+
+.main-actor-movie-div {
+    position: relative;
+    height: 300;
+}
+  
+.left-div {
+    float: left;
+    width: 20%;
+}
+
+.photo {
+    height: 100%;
+    margin: 0 auto;
+    border-radius: 3% 0 0 3%;
+}
+  
+.right-div {
+    float: right;
+    width: 80%;
+}
+
+@media (max-width: 1800px) {
+    .content {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+}
+
+@media (max-width: 1100px) {
+    .content {
+        max-width: 90%;
+        margin: 0 auto;
+    }
+
+    .main-actor-movie-div {
+        position: relative;
+        height: 630px;
+    }
+
+    .photo {
+        height: 300px;
+        margin: 0 auto;
+        border-radius: 3% 0 0 0;
+    }
+  
+    .left-div {
+        position: absolute;
+        top: 15px;
+        height: 300px;
+    }
+  
+    .right-div {
+        position: absolute;
+        bottom: 15px;
+        height: 300px;
+        width: 90%;
+    }
+}
+
+@media (max-width: 900px) {
+    .main-actor-movie-div {
+        height: 650px;
+    }
+
+    .right-div {
+        height: 320px;
+    }
+
 }

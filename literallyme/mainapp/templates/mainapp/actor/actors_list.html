@@ -8,14 +8,17 @@
 
     {% for actor in actors %}
 
-        <div class="alert alert-primary post" role="alert">
-            {% if actor.photo %}
-                <img src="{{ actor.photo.url }}" WIDTH="200" alt="actor.name">
-            {% endif %}
-            <h2><a href="{{ actor.get_absolute_url }}">{{ actor.name }}</a></h2>
-            <p>{{ actor.bio|truncatewords:50 }}</p>
-            <p><b>Movies</b> {% get_actors_movies actor=actor %}</p>
-
+        <div class="alert alert-primary main-actor-movie-div" role="alert">
+            <div class="left-div">
+                {% if actor.photo %}
+                    <img class="photo" src="{{ actor.photo.url }}">
+                {% endif %}
+            </div>
+            <div class="right-div">
+                <h2><a class="actor-name actor-link" href="{{ actor.get_absolute_url }}">{{ actor.name }}</a></h2>
+                <p class="actor-bio">{{ actor.bio|truncatewords:130 }}</p>
+                <p><b class="actor-movies actor-bold">Movies</b> {% get_actors_movies actor=actor %}</p>
+            </div>
         </div>
 
     {% endfor %}

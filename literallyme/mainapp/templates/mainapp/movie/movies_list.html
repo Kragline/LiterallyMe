@@ -5,14 +5,18 @@
     <h1>{{ title }}</h1>
 
     {% for movie in movies %}
-        <div class="movie alert alert-success" role="alert">
-            {% if movie.poster %}
-                <img src="{{ movie.poster.url }}" width="250" alt="movi.title">
-            {% endif %}
-            <h2><a href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h2>
-            <p>{{ movie.plot|truncatewords:50 }}</p>
-            <p><b>Release date:</b> {{ movie.release_date }}</p>
-            <p><b>Cast:</b> {% get_movies_actors movie=movie %}</p>
+        <div class="movie alert alert-success main-actor-movie-div" role="alert">
+            <div class="left-div">
+                {% if movie.poster %}
+                    <img class="photo" src="{{ movie.poster.url }}">
+                {% endif %}
+            </div>
+            <div class="right-div">
+                <h2><a class="movie-link" href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h2>
+                <p>{{ movie.plot|truncatewords:100 }}</p>
+                <p><b class="movie-bold">Release date:</b> {{ movie.release_date }}</p>
+                <p><b class="movie-bold">Cast:</b> {% get_movies_actors movie=movie %}</p>
+            </div>
         </div>
     {% endfor %}
 
