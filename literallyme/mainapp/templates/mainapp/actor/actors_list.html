@@ -3,21 +3,25 @@
 
 {% block content %}
 
-    <h1>{{ title }}</h1>
+    <h1 class="actor-bold">{{ title }}</h1>
 
 
     {% for actor in actors %}
 
-        <div class="alert alert-primary main-actor-movie-div" role="alert">
-            <div class="left-div">
-                {% if actor.photo %}
-                    <img class="photo" src="{{ actor.photo.url }}">
-                {% endif %}
-            </div>
-            <div class="right-div">
-                <h2><a class="actor-name actor-link" href="{{ actor.get_absolute_url }}">{{ actor.name }}</a></h2>
-                <p class="actor-bio">{{ actor.bio|truncatewords:130 }}</p>
-                <p><b class="actor-movies actor-bold">Movies</b> {% get_actors_movies actor=actor %}</p>
+        <div class="card mb-3" style="max-width: 80%;">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    {% if actor.photo %}
+                        <img class="img-fluid rounded-start" src="{{ actor.photo.url }}">
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h2 class="card-title"><a class="actor-link" href="{{ actor.get_absolute_url }}">{{ actor.name }}</a></h2>
+                        <p class="card-text">{{ actor.bio|truncatewords:140 }}</p>
+                        <p class="card-text"><small class="text-body-secondary"><b class="actor-movies actor-bold">Movies</b> {% get_actors_movies actor=actor %}</small></p>
+                    </div>
+                </div>
             </div>
         </div>
 
