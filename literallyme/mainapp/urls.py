@@ -13,4 +13,5 @@ urlpatterns = [
     path('movies/<slug:movie_slug>/', AboutMovieView.as_view(), name='about_movie'),
     path('movies/categories/<slug:category_slug>/', CategoryListView.as_view(), name='category'),
     path('add_category/', AddCategoryView.as_view(), name='add_category'),
+    path('search/', search_for_actors_view, name='actor_search'),
 ]

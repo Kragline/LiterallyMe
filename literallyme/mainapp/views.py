@@ -1,5 +1,5 @@
 from django.http import HttpResponseNotFound
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
@@ -149,6 +149,24 @@ class AddCategoryView(LoginRequiredMixin, DataMixin, CreateView):
         mixin_context = self.get_user_context(title='Add category')
 
         return dict(list(context.items()) + list(mixin_context.items()))
+
+
+def search_for_actors_view(request):
+    query = request.POST['searched']
+
+    context = {
+        'title': 'Search for ' + str(query).capitalize()
+    }
+
+    if query:
+        actors = Actor.objects.filter(name__contains=query)
+        context.update({
+            'query': query,
+            'actors': actors
+        })
+
+    return render(request, 'mainapp/actor/actor_search.html', context=context)
+
 
 
 # works only if DEBUG in settings.py is False
