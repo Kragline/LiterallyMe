@@ -1,7 +1,8 @@
 from django.http import HttpResponseNotFound
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .forms import *
@@ -50,6 +51,20 @@ class AddActorView(LoginRequiredMixin, DataMixin, CreateView):
         return dict(list(context.items()) + list(mixin_context.items()))
 
 
+class UpdateActorView(LoginRequiredMixin, DataMixin, UpdateView):
+    model = Actor
+    form_class = UpdateActorForm
+    template_name = 'mainapp/actor/update_actor.html'
+    context_object_name = 'actor'
+    slug_url_kwarg = 'actor_slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        mixin_context = self.get_user_context(title='Update actor')
+
+        return dict(list(context.items()) + list(mixin_context.items()))
+
+
 class MovieListView(DataMixin, ListView):
     model = Movie
     template_name = 'mainapp/movie/movies_list.html'
@@ -88,6 +103,20 @@ class AddMovieView(LoginRequiredMixin, DataMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         mixin_context = self.get_user_context(title='Add movie')
+
+        return dict(list(context.items()) + list(mixin_context.items()))
+
+
+class UpdateMovieView(LoginRequiredMixin, DataMixin, UpdateView):
+    model = Movie
+    form_class = UpdateMovieForm
+    template_name = 'mainapp/movie/update_movie.html'
+    context_object_name = 'movie'
+    slug_url_kwarg = 'movie_slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        mixin_context = self.get_user_context(title='Update movie')
 
         return dict(list(context.items()) + list(mixin_context.items()))
 

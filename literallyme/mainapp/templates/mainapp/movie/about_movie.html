@@ -3,19 +3,30 @@
 {% block content %}
 
     <h1>{{ title }}</h1>
-
-    <div class="movie alert alert-success" role="alert">
-        {% if movie.poster %}
-            <img src="{{ movie.poster.url }}" width="300" alt="movi.title">
-        {% endif %}
-        <h2><a class="movie-link" href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h2>
-        <p>{{ movie.plot|linebreaks }}</p>
-        <p><b class="movie-bold">Release date:</b> {{ movie.release_date }}</p>
-        <p><b class="movie-bold">Cast:</b></p>
-        {% for actor in movie.actors.all %}
-            <p><a class="movie-link" href="{{ actor.get_absolute_url }}">{{ actor.name }}</a></p>
-        {% endfor %}
-        <p>Post was added at: {{ movie.create_time|date:"d.m.Y" }}</p>
+        <div class="card mb-3" style="max-width: 80%;">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    {% if movie.poster %}
+                        <img class="img-fluid rounded-start" src="{{ movie.poster.url }}">
+                    {% endif %}
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h2 class="card-title movie-bold"><a class="movie-link" href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h2>
+                        <p class="card-text">{{ movie.plot|linebreaks }}</p>
+                        <p class="card-text"><b class="movie-bold">Release date:</b> {{ movie.release_date }}</p>
+                        <p class="card-text"><small class="text-body-secondary"><b class="movie-bold">Cast:</b></small></p>
+                        {% for actor in movie.actors.all %}
+                            <p class="card-text"><a class="movie-link" href="{{ actor.get_absolute_url }}">{{ actor.name }}</a></p>
+                        {% endfor %}
+                        <p>Post was added at: {{ movie.create_time|date:"d.m.Y" }}</p>
+                        {% if user.is_superuser %}
+                            <p class="card-text"><a class="movie-link" href="{% url 'update_movie' movie.slug %}">Update movie</a></p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 {% endblock %}

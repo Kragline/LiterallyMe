@@ -5,7 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 username_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Username'}
 email_attrs = {'type': 'email', 'class': 'form-control', 'placeholder': 'name@example.com'}
-password_attrs = {'type': 'password', 'class': 'form-control', 'placeholder': 'Username'}
+password_attrs = {'type': 'password', 'class': 'form-control', 'placeholder': 'Password'}
 
 
 class RegisterUserForm(UserCreationForm):

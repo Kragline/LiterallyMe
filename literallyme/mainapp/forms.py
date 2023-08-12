@@ -31,7 +31,41 @@ class AddActorForm(forms.ModelForm):
         }
 
 
+class UpdateActorForm(forms.ModelForm):
+    class Meta:
+        model = Actor
+        fields = ['name', 'bio', 'photo', 'slug']
+
+        widgets = {
+            'name': forms.TextInput(attrs=name_attrs),
+            'bio': forms.Textarea(attrs=bio_attrs),
+            'slug': forms.TextInput(attrs=slug_attrs),
+            'photo': forms.FileInput(attrs=photo_attrs),
+        }
+
+
 class AddMovieForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['actors'].empty_label = 'Choose actors'
+        self.fields['category'].empty_label = 'Choose category'
+
+    class Meta:
+        model = Movie
+        fields = ['title', 'plot', 'release_date', 'poster', 'actors', 'category', 'slug']
+
+        widgets = {
+            'title': forms.TextInput(attrs=title_attrs),
+            'plot': forms.Textarea(attrs=plot_attrs),
+            'release_date': forms.TextInput(attrs=release_date_attrs),
+            'poster': forms.FileInput(attrs=photo_attrs),
+            'slug': forms.TextInput(attrs=slug_attrs),
+            'actors': forms.SelectMultiple(attrs=select_attrs),
+            'category': forms.Select(attrs=select_attrs)
+        }
+
+
+class UpdateMovieForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['actors'].empty_label = 'Choose actors'
