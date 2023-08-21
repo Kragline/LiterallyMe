@@ -1,5 +1,6 @@
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 
 # all slugs are setted automatucly
@@ -44,8 +45,8 @@ class Movie(models.Model):
     poster = models.ImageField(upload_to='posters/%d/%m/%Y')
     create_time = models.DateTimeField(auto_now_add=True, null=True)
     actors = models.ManyToManyField(Actor, related_name='movies') # related_name is for finding each actors movies (actor.movies)
-    rating = models.IntegerField(default=1, blank=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='movies')
+    rating = models.IntegerField(default=1, blank=True)
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
 
     def __str__(self):
@@ -57,3 +58,19 @@ class Movie(models.Model):
     class Meta:
         verbose_name = 'Movies (literally me)'
         verbose_name_plural = 'Movies (literally me)'
+
+
+class Comment(models.Model):
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments')
+    text = models.TextField()
+    create_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.text
+
+    def get_absolute_url(self):
+        return reverse('update_comment', kwargs={'comment_id': self.pk, 'movie_slug': self.movie.slug})
+
+    def get_absolute_url_for_delete(self):
+        return reverse('delete_comment', kwargs={'comment_id': self.pk, 'movie_slug': self.movie.slug})

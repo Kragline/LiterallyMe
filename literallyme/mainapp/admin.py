@@ -31,6 +31,12 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug': ('name',)}
 
 
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('id', 'author', 'movie', 'text')
+    list_display_links = ('id', 'author', 'movie', 'text')
+
+
 admin.site.register(Actor, ActorAdmin)
 admin.site.register(Movie, MovieAdmin)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Comment, CommentAdmin)

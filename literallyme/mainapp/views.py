@@ -2,8 +2,10 @@ from django.http import HttpResponseNotFound
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+from django.db.models import Count
 
 from .forms import *
 from .utils import *
@@ -55,7 +57,7 @@ class UpdateActorView(LoginRequiredMixin, DataMixin, UpdateView):
     model = Actor
     form_class = UpdateActorForm
     template_name = 'mainapp/actor/update_actor.html'
-    context_object_name = 'actor'
+    login_url = reverse_lazy('home')
     slug_url_kwarg = 'actor_slug'
 
     def get_context_data(self, **kwargs):
@@ -63,6 +65,9 @@ class UpdateActorView(LoginRequiredMixin, DataMixin, UpdateView):
         mixin_context = self.get_user_context(title='Update actor')
 
         return dict(list(context.items()) + list(mixin_context.items()))
+
+    def get_success_url(self):
+        return reverse_lazy('about_actor', kwargs={'actor_slug': self.object.slug})
 
 
 def search_for_actors_view(request):
@@ -97,17 +102,45 @@ class MovieListView(DataMixin, ListView):
         return Movie.objects.order_by('create_time')
 
 
-class AboutMovieView(DataMixin, DetailView):
-    model = Movie
-    template_name = 'mainapp/movie/about_movie.html'
-    context_object_name = 'movie'
-    slug_url_kwarg = 'movie_slug'
+# class AboutMovieView(DataMixin, DetailView):
+#     model = Movie
+#     template_name = 'mainapp/movie/about_movie.html'
+#     context_object_name = 'movie'
+#     slug_url_kwarg = 'movie_slug'
+# 
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         mixin_context = self.get_user_context(title='About ' + context['movie'].title)
+# 
+#         return dict(list(context.items()) + list(mixin_context.items()))
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        mixin_context = self.get_user_context(title='About ' + context['movie'].title)
 
-        return dict(list(context.items()) + list(mixin_context.items()))
+def about_movie_view(request, movie_slug):
+    movie = Movie.objects.get(slug=movie_slug)
+    comments = movie.comments.all().order_by('-create_time')
+    categories = Category.objects.annotate(movies_count=Count('movies'))
+
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.movie = movie
+            new_comment.author = request.user
+            new_comment.save()
+
+            return redirect(movie.get_absolute_url())
+    else:
+        comment_form = CommentForm()
+
+    context = {
+        'menu': menu,
+        'categories': categories,
+        'movie': movie,
+        'comments': comments,
+        'form': comment_form
+    }
+    
+    return render(request, 'mainapp/movie/about_movie.html', context=context)
 
 
 class AddMovieView(LoginRequiredMixin, DataMixin, CreateView):
@@ -128,7 +161,7 @@ class UpdateMovieView(LoginRequiredMixin, DataMixin, UpdateView):
     model = Movie
     form_class = UpdateMovieForm
     template_name = 'mainapp/movie/update_movie.html'
-    context_object_name = 'movie'
+    login_url = reverse_lazy('home')
     slug_url_kwarg = 'movie_slug'
 
     def get_context_data(self, **kwargs):
@@ -136,6 +169,9 @@ class UpdateMovieView(LoginRequiredMixin, DataMixin, UpdateView):
         mixin_context = self.get_user_context(title='Update movie')
 
         return dict(list(context.items()) + list(mixin_context.items()))
+
+    def get_success_url(self):
+        return reverse_lazy('about_movie', kwargs={'movie_slug': self.object.slug})
 
 
 def search_for_movies_view(request):
@@ -181,6 +217,40 @@ class AddCategoryView(LoginRequiredMixin, DataMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         mixin_context = self.get_user_context(title='Add category')
+
+        return dict(list(context.items()) + list(mixin_context.items()))
+
+
+class UpdateCommentView(LoginRequiredMixin, DataMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = 'mainapp/comment/update_comment.html'
+    context_object_name = 'form'
+    login_url = reverse_lazy('home')
+    pk_url_kwarg = 'comment_id'
+    slug_url_kwarg = 'movie_slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        mixin_context = self.get_user_context(title='Update comment')
+
+        return dict(list(context.items()) + list(mixin_context.items()))
+
+    def get_success_url(self):
+        return reverse_lazy('about_movie', kwargs={'movie_slug': self.object.movie.slug})
+
+
+class DeleteCommentView(LoginRequiredMixin, DataMixin, DeleteView):
+    model = Comment
+    template_name = 'mainapp/comment/delete_comment.html'
+    context_object_name = 'comment'
+    login_url = reverse_lazy('home')
+    success_url = reverse_lazy('home')
+    pk_url_kwarg = 'comment_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        mixin_context = self.get_user_context(title='Delete comment')
 
         return dict(list(context.items()) + list(mixin_context.items()))
 

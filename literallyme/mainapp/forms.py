@@ -19,6 +19,7 @@ select_attrs = {'class': 'form-select'}
 
 category_name_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Category name'}
 
+comment_attrs = {'type': 'text', 'class': 'form-control', 'cols': 70, 'placeholder': 'Add your comment'}
 
 class AddActorForm(forms.ModelForm):
     class Meta:
@@ -103,4 +104,14 @@ class AddCategoryForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs=category_name_attrs),
             'slug': forms.TextInput(attrs=slug_attrs)
+        }
+
+
+class CommentForm(forms.ModelForm):
+    class Meta:
+        model = Comment
+        fields = ['text']
+
+        widgets = {
+            'text': forms.TextInput(attrs=comment_attrs)
         }
