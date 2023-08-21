@@ -1,4 +1,5 @@
 from django import forms
+from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 
@@ -48,8 +49,14 @@ class UpdateActorForm(forms.ModelForm):
 class AddMovieForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['actors'].empty_label = 'Choose actors'
         self.fields['category'].empty_label = 'Choose category'
+
+    def clean_rating(self):
+        data = self.cleaned_data['rating']
+        if data < 1 or data > 10:
+            raise ValidationError('Rating must be from 1 to 10')
+
+        return data
 
     class Meta:
         model = Movie
