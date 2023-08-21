@@ -1,6 +1,14 @@
 {% extends 'mainapp/base.html' %}
 {% load mainapp_tags %}
 
+{% block search %}
+    <form class="d-flex" role="search" action="{% url 'actor_search' %}" method="POST">
+        {% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="Search for actor" aria-label="Search" name="actor-search">
+        <button class="btn btn-outline-primary" type="submit">Search</button>
+    </form>
+{% endblock %}
+
 {% block content %}
 
     <h1 class="actor-bold">{{ title }}</h1>

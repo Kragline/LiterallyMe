@@ -1,0 +1,42 @@
+{% extends 'mainapp/base.html' %}
+{% load mainapp_tags %}
+
+{% block search %}
+    <form class="d-flex" role="search" action="{% url 'movie_search' %}" method="POST">
+        {% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="Search for movies" aria-label="Search" name="movie-search">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+{% endblock %}
+
+{% block content %}
+
+    <h1 class="movie-bold">{{ title }}</h1>
+
+    {% if movies %}
+        <div class="row row-cols-1 row-cols-md-3 g-4 mb-3">
+            {% for movie in movies %}
+                    <div class="col">
+                        <div class="card h-100">
+                            {% if movie.poster %}
+                                <img class="card-img-top" src="{{ movie.poster.url }}">
+                            {% endif %}
+                            <div class="card-body">
+                                <h2 class="card-title"><a class="movie-link" href="{{ movie.get_absolute_url }}">{{ movie.title }}</a></h2>
+                                <p class="card-text">{{ movie.plot|truncatewords:50 }}</p>
+                                <p class="card-text">
+                                    <b class="movie-bold">Release date:</b> {{ movie.release_date }}
+                                </p>
+                                <p class="card-text">
+                                    <small class="text-body-secondary">
+                                        <b class="movie-bold">Cast:</b> {% get_movies_actors movie=movie %}
+                                    </small>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+{% endblock %}

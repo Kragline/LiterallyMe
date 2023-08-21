@@ -3,6 +3,10 @@
     margin: 0 auto;
 }
 
+.d-flex {
+    margin-bottom: 0px;
+}
+
 .pagination {
     width: 60%;
     margin-left: auto;

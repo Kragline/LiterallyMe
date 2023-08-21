@@ -65,6 +65,23 @@ class UpdateActorView(LoginRequiredMixin, DataMixin, UpdateView):
         return dict(list(context.items()) + list(mixin_context.items()))
 
 
+def search_for_actors_view(request):
+    query = request.POST['actor-search']
+
+    context = {
+        'title': 'Results for ' + str(query).capitalize()
+    }
+
+    if query:
+        actors = Actor.objects.filter(name__contains=query)
+        context.update({
+            'query': query,
+            'actors': actors
+        })
+
+    return render(request, 'mainapp/actor/actor_search.html', context=context)
+
+
 class MovieListView(DataMixin, ListView):
     model = Movie
     template_name = 'mainapp/movie/movies_list.html'
@@ -121,6 +138,23 @@ class UpdateMovieView(LoginRequiredMixin, DataMixin, UpdateView):
         return dict(list(context.items()) + list(mixin_context.items()))
 
 
+def search_for_movies_view(request):
+    query = request.POST['movie-search']
+
+    context = {
+        'title': 'Results for ' + str(query).capitalize()
+    }
+
+    if query:
+        movies = Movie.objects.filter(title__contains=query)
+        context.update({
+            'query': query,
+            'movies': movies
+        })
+
+    return render(request, 'mainapp/movie/movie_search.html', context=context)
+
+
 class CategoryListView(DataMixin, ListView):
     model = Movie
     template_name = 'mainapp/category/show_category.html'
@@ -149,24 +183,6 @@ class AddCategoryView(LoginRequiredMixin, DataMixin, CreateView):
         mixin_context = self.get_user_context(title='Add category')
 
         return dict(list(context.items()) + list(mixin_context.items()))
-
-
-def search_for_actors_view(request):
-    query = request.POST['searched']
-
-    context = {
-        'title': 'Search for ' + str(query).capitalize()
-    }
-
-    if query:
-        actors = Actor.objects.filter(name__contains=query)
-        context.update({
-            'query': query,
-            'actors': actors
-        })
-
-    return render(request, 'mainapp/actor/actor_search.html', context=context)
-
 
 
 # works only if DEBUG in settings.py is False
