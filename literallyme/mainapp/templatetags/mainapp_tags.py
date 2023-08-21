@@ -1,5 +1,4 @@
 from django import template
-from ..models import *
 
 
 register = template.Library()
@@ -23,3 +22,8 @@ def get_actors_movies(actor):
         actor_movies += movie.title + ', '
 
     return actor_movies.rstrip(', ')
+
+
+@register.simple_tag()
+def integer_range(number):
+    return range(number)

@@ -44,6 +44,7 @@ class Movie(models.Model):
     poster = models.ImageField(upload_to='posters/%d/%m/%Y')
     create_time = models.DateTimeField(auto_now_add=True, null=True)
     actors = models.ManyToManyField(Actor, related_name='movies') # related_name is for finding each actors movies (actor.movies)
+    rating = models.IntegerField(max_length=2, null=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='movies')
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
 

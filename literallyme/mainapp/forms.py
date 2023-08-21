@@ -13,6 +13,7 @@ photo_attrs = {'type': 'file', 'class': 'form-control'}
 title_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Movie name'}
 plot_attrs = {'type': 'text', 'class': 'form-control', 'cols': 70, 'placeholder': 'Movie plot'}
 release_date_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Release date'}
+rating_attrs = {'type': 'number', 'class': 'form-control', 'placeholder': 'Movie rating (1-10)'}
 select_attrs = {'class': 'form-select'}
 
 category_name_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Category name'}
@@ -52,7 +53,7 @@ class AddMovieForm(forms.ModelForm):
 
     class Meta:
         model = Movie
-        fields = ['title', 'plot', 'release_date', 'poster', 'actors', 'category', 'slug']
+        fields = ['title', 'plot', 'release_date', 'poster', 'actors', 'rating', 'category', 'slug']
 
         widgets = {
             'title': forms.TextInput(attrs=title_attrs),
@@ -61,6 +62,7 @@ class AddMovieForm(forms.ModelForm):
             'poster': forms.FileInput(attrs=photo_attrs),
             'slug': forms.TextInput(attrs=slug_attrs),
             'actors': forms.SelectMultiple(attrs=select_attrs),
+            'rating': forms.NumberInput(attrs=rating_attrs),
             'category': forms.Select(attrs=select_attrs)
         }
 
@@ -73,7 +75,7 @@ class UpdateMovieForm(forms.ModelForm):
 
     class Meta:
         model = Movie
-        fields = ['title', 'plot', 'release_date', 'poster', 'actors', 'category', 'slug']
+        fields = ['title', 'plot', 'release_date', 'poster', 'actors', 'rating', 'category', 'slug']
 
         widgets = {
             'title': forms.TextInput(attrs=title_attrs),
@@ -82,6 +84,7 @@ class UpdateMovieForm(forms.ModelForm):
             'poster': forms.FileInput(attrs=photo_attrs),
             'slug': forms.TextInput(attrs=slug_attrs),
             'actors': forms.SelectMultiple(attrs=select_attrs),
+            'rating': forms.NumberInput(attrs=rating_attrs),
             'category': forms.Select(attrs=select_attrs)
         }
 

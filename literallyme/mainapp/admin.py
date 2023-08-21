@@ -13,8 +13,8 @@ class ActorAdmin(admin.ModelAdmin):
 
 
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'poster', 'create_time')
-    list_display_links = ('id', 'title')
+    list_display = ('id', 'title', 'poster', 'create_time', 'rating')
+    list_display_links = ('id', 'title', 'rating')
 
     search_fields = ('title',)
     list_filter = ('create_time',)
