@@ -77,7 +77,6 @@ class AddMovieForm(forms.ModelForm):
 class UpdateMovieForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['actors'].empty_label = 'Choose actors'
         self.fields['category'].empty_label = 'Choose category'
 
     class Meta:
