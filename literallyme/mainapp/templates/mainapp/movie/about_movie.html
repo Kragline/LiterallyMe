@@ -29,7 +29,10 @@
                     </div>
                     <div class="card-body">
                         {% if user.is_superuser %}
-                            <p class="card-text"><a class="movie-link" href="{% url 'update_movie' movie.slug %}">Update movie</a></p>
+                            <p class="card-text">
+                                <a class="movie-link" href="{{ movie.get_absolute_url_for_update }}">Update</a> |
+                                <a class="movie-link" href="{{ movie.get_absolute_url_for_delete }}">Delete</a>
+                            </p>
                         {% endif %}
                         <p class="card-text">{{ movie.plot|linebreaks }}</p>
                         {% if user.is_authenticated %}
@@ -40,15 +43,15 @@
                                     {{ form.non_field_errors }}
                                 </div>
                                 {% endif %}
-                                <div class="mb-3">
+                                <div class="input-group mb-3">
                                     {{ form.text }}
                                     {% if form.errors %}
                                     <div class="alert alert-warning post mt-2" role="alert">
                                         {{ form.errors }}
                                     </div>
                                     {% endif %}
+                                <button type="button" class="btn btn-outline-success">Send</button>
                                 </div>
-                                <button type="submit" class="btn btn-outline-success">Submit</button>
                             </form>
                         {% endif %}
                         {% if comments %}
@@ -61,7 +64,7 @@
                                         <p class="card-text">{{ comment.text }}</p>
                                         {% if user.is_authenticated and user == comment.author %}
                                             <p class="card-text">
-                                                <a class="movie-link" href="{{ comment.get_absolute_url }}">Update</a> |
+                                                <a class="movie-link" href="{{ comment.get_absolute_url_for_update }}">Update</a> |
                                                 <a class="movie-link" href="{{ comment.get_absolute_url_for_delete }}">Delete</a>
                                             </p>
                                         {% endif %}
@@ -75,7 +78,7 @@
                         {% endif %}
                     </div>
                     <div class="card-footer text-end">
-                        <small class="text-body-secondary">Post was added at: {{ movie.create_time|date:"d.m.Y" }}</small>
+                        <small class="text-body-secondary">Was created at: {{ movie.create_time|date:"d.m.Y" }}</small>
                     </div>
                 </div>
             </div>

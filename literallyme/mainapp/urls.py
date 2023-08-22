@@ -8,12 +8,14 @@ urlpatterns = [
     path('add_actor/', AddActorView.as_view(), name='add_actor'),
     path('actor/<slug:actor_slug>/', AboutActorView.as_view(), name='about_actor'),
     path('actors/<slug:actor_slug>/update/', UpdateActorView.as_view(), name='update_actor'),
+    path('actors/<slug:actor_slug>/delete/', DeleteActorView.as_view(), name='delete_actor'),
 
     # Movie
     path('movies/', MovieListView.as_view(), name='movies'),
     path('add_movie/', AddMovieView.as_view(), name='add_movie'),
     path('movies/<slug:movie_slug>/', about_movie_view, name='about_movie'),
     path('movies/<slug:movie_slug>/update/', UpdateMovieView.as_view(), name='update_movie'),
+    path('movies/<slug:movie_slug>/delete/', DeleteMovieView.as_view(), name='delete_movie'),
 
     # Category
     path('movies/categories/<slug:category_slug>/', CategoryListView.as_view(), name='category'),

@@ -18,6 +18,12 @@ class Actor(models.Model):
     def get_absolute_url(self):
         return reverse('about_actor', kwargs={'actor_slug': self.slug})
 
+    def get_absolute_url_for_update(self):
+        return reverse('update_actor', kwargs={'actor_slug': self.slug})
+
+    def get_absolute_url_for_delete(self):
+        return reverse('delete_actor', kwargs={'actor_slug': self.slug})
+
     class Meta:
         verbose_name = 'Actors (they are literally me)'
         verbose_name_plural = 'Actors (they are literally me)'
@@ -55,6 +61,12 @@ class Movie(models.Model):
     def get_absolute_url(self):
         return reverse('about_movie', kwargs={'movie_slug': self.slug})
 
+    def get_absolute_url_for_update(self):
+        return reverse('update_movie', kwargs={'movie_slug': self.slug})
+
+    def get_absolute_url_for_delete(self):
+        return reverse('delete_movie', kwargs={'movie_slug': self.slug})
+
     class Meta:
         verbose_name = 'Movies (literally me)'
         verbose_name_plural = 'Movies (literally me)'
@@ -69,7 +81,7 @@ class Comment(models.Model):
     def __str__(self):
         return self.text
 
-    def get_absolute_url(self):
+    def get_absolute_url_for_update(self):
         return reverse('update_comment', kwargs={'comment_id': self.pk, 'movie_slug': self.movie.slug})
 
     def get_absolute_url_for_delete(self):
