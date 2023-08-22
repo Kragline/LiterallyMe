@@ -30,3 +30,15 @@
 .movie-bold {
     color: rgb(32, 119, 32);
 }
+
+.centered-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.not-centered {
+    width: 100%;
+}

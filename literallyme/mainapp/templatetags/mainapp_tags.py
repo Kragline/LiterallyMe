@@ -25,5 +25,10 @@ def get_actors_movies(actor):
 
 
 @register.simple_tag()
-def integer_range(number):
+def colored_stars_range(number):
     return range(number)
+
+
+@register.simple_tag()
+def other_stars_range(number):
+    return range(10-number)
