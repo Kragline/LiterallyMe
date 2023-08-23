@@ -3,7 +3,7 @@ from .models import *
 
 
 menu = [
-    {'title': 'Movies', 'url_name': 'movies'},
+    {'title': 'Actors', 'url_name': 'actors'},
     {'title': 'Add actor', 'url_name': 'add_actor'},
     {'title': 'Add category', 'url_name': 'add_category'},
     {'title': 'Add movie', 'url_name': 'add_movie'}
