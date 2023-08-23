@@ -1,0 +1,56 @@
+{% extends 'mainapp/base.html' %}
+
+{% block content %}
+
+    <h1 class="movie-bold">{{ title }}</h1>
+
+    <div class="card border-success mb-3">
+        <div class="card-header">
+            <h5 class="card-title">{{ comment.author }}</h5>
+        </div>
+        <div class="card-body">
+            <p class="card-text">{{ comment.text }}</p>
+            <form method="post">
+                {% csrf_token %}
+                {% if form.non_field_errors %}
+                <div class="alert alert-warning post mt-2" role="alert">
+                    {{ form.non_field_errors }}
+                </div>
+                {% endif %}
+                <div class="mb-3">
+                    {{ form.text }}
+                    {% if form.errors %}
+                    <div class="alert alert-warning post mt-2" role="alert">
+                        {{ form.errors }}
+                    </div>
+                    {% endif %}
+                </div>
+                <button type="submit" class="btn btn-outline-success">Answer</button>
+            </form>
+            {% if comment_answers %}
+                {% for com_answ in comment_answers %}
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h5 class="card-title">{{ com_answ.author }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">{{ com_answ.text }}</p>
+                            {% if user.is_authenticated and user == com_answ.author %}
+                                <p class="card-text">
+                                    <a class="movie-link" href="{{ com_answ.get_absolute_url_for_update }}">Update</a> |
+                                    <a class="movie-link" href="{{ com_answ.get_absolute_url_for_delete }}">Delete</a>
+                                </p>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <div class="card-footer text-end">
+            <small class="text-body-secondary">{{ comment.create_time|date:"d.m.Y" }}</small>
+        </div>
+    </div>
+
+
+
+{% endblock %}

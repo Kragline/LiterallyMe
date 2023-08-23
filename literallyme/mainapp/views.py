@@ -254,6 +254,39 @@ class AddCategoryView(LoginRequiredMixin, DataMixin, CreateView):
 '''                 ****    Comment   ****                   '''
 
 
+def about_comment_view(request, movie_slug, comment_id):
+    movie = Movie.objects.get(slug=movie_slug)
+    comment = Comment.objects.get(pk=comment_id)
+    comment_answers = comment.comment_answers.all().order_by('-create_time')
+    categories = Category.objects.annotate(movies_count=Count('movies'))
+
+    if request.method == 'POST':
+        comment_form = CommentAnswerForm(request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.parent_comment = comment
+            new_comment.author = request.user
+            new_comment.save()
+
+            return redirect(comment.get_absolute_url())
+    else:
+        comment_form = CommentAnswerForm()
+
+    user_menu = menu.copy()
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        user_menu = [user_menu[0]]
+
+    context = {
+        'menu': user_menu,
+        'categories': categories,
+        'title': f'About comment under {movie.title}',
+        'comment': comment,
+        'comment_answers': comment_answers,
+        'form': comment_form
+    }
+    return render(request, 'mainapp/comment/about_comment.html', context=context)
+
+
 class UpdateCommentView(LoginRequiredMixin, DataMixin, UpdateView):
     model = Comment
     form_class = CommentForm
@@ -286,6 +319,47 @@ class DeleteCommentView(LoginRequiredMixin, DataMixin, DeleteView):
         mixin_context = self.get_user_context(title='Delete comment')
 
         return dict(list(context.items()) + list(mixin_context.items()))
+
+    def get_success_url(self):
+        return reverse_lazy('about_movie', kwargs={'movie_slug': self.object.movie.slug})
+
+
+'''                 ****    Comment answer   ****                   '''
+
+
+class UpdateCommentAnswerView(LoginRequiredMixin, DataMixin, UpdateView):
+    model = CommentAnswer
+    form_class = CommentAnswerForm
+    template_name = 'mainapp/comment_answer/update_comment_answer.html'
+    context_object_name = 'form'
+    login_url = reverse_lazy('home')
+    pk_url_kwarg = 'comment_answer_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        mixin_context = self.get_user_context(title='Update comment answer')
+
+        return dict(list(context.items()) + list(mixin_context.items()))
+
+    def get_success_url(self):
+        return reverse_lazy('about_comment', kwargs={'movie_slug': self.object.parent_comment.movie.slug, 'comment_id': self.object.parent_comment.pk})
+
+
+class DeleteCommentAnswerView(LoginRequiredMixin, DataMixin, DeleteView):
+    model = CommentAnswer
+    template_name = 'mainapp/comment_answer/delete_comment_answer.html'
+    context_object_name = 'comment'
+    login_url = reverse_lazy('home')
+    pk_url_kwarg = 'comment_answer_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        mixin_context = self.get_user_context(title='Delete comment answer')
+
+        return dict(list(context.items()) + list(mixin_context.items()))
+
+    def get_success_url(self):
+        return reverse_lazy('about_comment', kwargs={'movie_slug': self.object.parent_comment.movie.slug, 'comment_id': self.object.parent_comment.pk})
 
 
 # works only if DEBUG in settings.py is False

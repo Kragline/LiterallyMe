@@ -70,13 +70,13 @@
                                     </div>
                                     <div class="card-body">
                                         <p class="card-text">{{ comment.text }}</p>
-                                        {% if user.is_authenticated and user == comment.author %}
-                                            <p class="card-text">
+                                        <p class="card-text">
+                                            {% if user.is_authenticated and user == comment.author %}
                                                 <a class="movie-link" href="{{ comment.get_absolute_url_for_update }}">Update</a> |
-                                                <a class="movie-link" href="{{ comment.get_absolute_url_for_delete }}">Delete</a>
-                                            </p>
-                                        {% endif %}
-                                            <p class="card-text"></p>
+                                                <a class="movie-link" href="{{ comment.get_absolute_url_for_delete }}">Delete</a> |
+                                            {% endif %}
+                                            <a class="movie-link" href="{{ comment.get_absolute_url }}">Answer</a>
+                                        </p>
                                     </div>
                                     <div class="card-footer text-end">
                                         <small class="text-body-secondary">{{ comment.create_time|date:"d.m.Y" }}</small>

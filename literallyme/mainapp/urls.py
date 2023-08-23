@@ -22,8 +22,13 @@ urlpatterns = [
     path('add_category/', AddCategoryView.as_view(), name='add_category'),
 
     # Comment
-    path('movie/<slug:movie_slug>/comment/update/<int:comment_id>/', UpdateCommentView.as_view(), name='update_comment'),
-    path('movie/<slug:movie_slug>/comment/delete/<int:comment_id>/', DeleteCommentView.as_view(), name='delete_comment'),
+    path('movie/<slug:movie_slug>/comment/<int:comment_id>/about/', about_comment_view, name='about_comment'),
+    path('movie/<slug:movie_slug>/comment/<int:comment_id>/update/', UpdateCommentView.as_view(), name='update_comment'),
+    path('movie/<slug:movie_slug>/comment/<int:comment_id>/delete/', DeleteCommentView.as_view(), name='delete_comment'),
+
+    # Comment answer
+    path('comment_answer/<int:comment_answer_id>/update/', UpdateCommentAnswerView.as_view(), name='update_comment_answer'),
+    path('comment_answer/<int:comment_answer_id>/delete/', DeleteCommentAnswerView.as_view(), name='delete_comment_answer'),
 
     # search views
     path('search-movie', search_for_movies_view, name='movie_search'),

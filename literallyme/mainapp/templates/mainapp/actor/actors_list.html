@@ -16,7 +16,7 @@
 
     {% for actor in actors %}
 
-        <div class="card mb-3" style="max-width: 80%;">
+        <div class="card mb-3">
             <div class="row g-0">
                 <div class="col-md-4">
                     {% if actor.photo %}
@@ -26,7 +26,7 @@
                 <div class="col-md-8">
                     <div class="card-body">
                         <h2 class="card-title"><a class="actor-link" href="{{ actor.get_absolute_url }}">{{ actor.name }}</a></h2>
-                        <p class="card-text">{{ actor.bio|truncatewords:140 }}</p>
+                        <p class="card-text">{{ actor.bio|truncatewords:240 }}</p>
                         <p class="card-text"><small class="text-body-secondary"><b class="actor-movies actor-bold">Movies</b> {% get_actors_movies actor=actor %}</small></p>
                     </div>
                 </div>

@@ -32,11 +32,17 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('id', 'author', 'movie', 'text')
-    list_display_links = ('id', 'author', 'movie', 'text')
+    list_display = ('author', 'movie', 'text')
+    list_display_links = ('author', 'movie', 'text')
+
+
+class CommentAnswerAdmin(admin.ModelAdmin):
+    list_display = ('author', 'parent_comment', 'text')
+    list_display_links = ('author', 'parent_comment', 'text')
 
 
 admin.site.register(Actor, ActorAdmin)
 admin.site.register(Movie, MovieAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Comment, CommentAdmin)
+admin.site.register(CommentAnswer, CommentAnswerAdmin)
