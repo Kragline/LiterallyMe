@@ -46,8 +46,12 @@ def about_movie_view(request, movie_slug):
     else:
         comment_form = CommentForm()
 
+    user_menu = menu.copy()
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        user_menu = [user_menu[0]]
+
     context = {
-        'menu': menu,
+        'menu': user_menu,
         'categories': categories,
         'movie': movie,
         'comments': comments,

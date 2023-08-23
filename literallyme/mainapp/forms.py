@@ -17,7 +17,7 @@ select_attrs = {'class': 'form-select'}
 
 category_name_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Category name'}
 
-comment_attrs = {'type': 'text', 'class': 'form-control', 'cols': 70, 'placeholder': 'Add your comment'}
+comment_attrs = {'type': 'text', 'class': 'form-control', 'cols': 70, 'rows': 1, 'placeholder': 'Add your comment'}
 
 
 class ActorForm(forms.ModelForm):
@@ -73,10 +73,14 @@ class CategoryForm(forms.ModelForm):
 
 
 class CommentForm(forms.ModelForm):
+    def clean_text(self):
+        new_comment_text = self.cleaned_data['text']
+        return new_comment_text.capitalize()
+
     class Meta:
         model = Comment
         fields = ['text']
 
         widgets = {
-            'text': forms.TextInput(attrs=comment_attrs)
+            'text': forms.Textarea(attrs=comment_attrs)
         }
