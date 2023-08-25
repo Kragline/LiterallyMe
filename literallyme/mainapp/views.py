@@ -31,7 +31,10 @@ class MovieListView(DataMixin, ListView):
 
 def about_movie_view(request, movie_slug):
     movie = Movie.objects.get(slug=movie_slug)
-    comments = movie.comments.all().order_by('-create_time')
+    # using select_related('author') to optimize query and grab author of every comment automatically
+    # if we don't do that django will do it for every comment when we check is user authenticated, is he the author etc
+    # the same will be done in about_comment_view
+    comments = movie.comments.all().select_related('author').order_by('-create_time')
     categories = Category.objects.annotate(movies_count=Count('movies'))
 
     if request.method == 'POST':
@@ -257,7 +260,8 @@ class AddCategoryView(LoginRequiredMixin, DataMixin, CreateView):
 def about_comment_view(request, movie_slug, comment_id):
     movie = Movie.objects.get(slug=movie_slug)
     comment = Comment.objects.get(pk=comment_id)
-    comment_answers = comment.comment_answers.all().order_by('-create_time')
+    # explanation of .select_related('author') in about_movie_view
+    comment_answers = comment.comment_answers.all().select_related('author').order_by('-create_time')
     categories = Category.objects.annotate(movies_count=Count('movies'))
 
     if request.method == 'POST':

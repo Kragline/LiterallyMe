@@ -7,7 +7,7 @@ from .models import *
 name_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Actor name'}
 bio_attrs = {'type': 'text', 'class': 'form-control', 'cols': 70, 'placeholder': 'Actor bio'}
 slug_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Slug for URL'}
-photo_attrs = {'type': 'file', 'class': 'form-control'}
+file_attrs = {'type': 'file', 'class': 'form-control'}
 
 title_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Movie name'}
 plot_attrs = {'type': 'text', 'class': 'form-control', 'cols': 70, 'placeholder': 'Movie plot'}
@@ -31,7 +31,7 @@ class ActorForm(forms.ModelForm):
             'name': forms.TextInput(attrs=name_attrs),
             'bio': forms.Textarea(attrs=bio_attrs),
             'slug': forms.TextInput(attrs=slug_attrs),
-            'photo': forms.FileInput(attrs=photo_attrs),
+            'photo': forms.FileInput(attrs=file_attrs),
         }
 
 
@@ -49,13 +49,14 @@ class MovieForm(forms.ModelForm):
 
     class Meta:
         model = Movie
-        fields = ['title', 'plot', 'release_date', 'poster', 'actors', 'rating', 'category', 'slug']
+        fields = ['title', 'plot', 'release_date', 'poster', 'trailer', 'actors', 'rating', 'category', 'slug']
 
         widgets = {
             'title': forms.TextInput(attrs=title_attrs),
             'plot': forms.Textarea(attrs=plot_attrs),
             'release_date': forms.TextInput(attrs=release_date_attrs),
-            'poster': forms.FileInput(attrs=photo_attrs),
+            'trailer': forms.FileInput(attrs=file_attrs),
+            'poster': forms.FileInput(attrs=file_attrs),
             'slug': forms.TextInput(attrs=slug_attrs),
             'actors': forms.SelectMultiple(attrs=select_attrs),
             'rating': forms.NumberInput(attrs=rating_attrs),

@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 class Actor(models.Model):
     name = models.CharField(max_length=100)
     bio = models.TextField(blank=True)
-    photo = models.ImageField(upload_to='photos/%d/%m/%Y')
+    photo = models.ImageField(upload_to='actor_photos')
     create_time = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
 
@@ -48,7 +48,8 @@ class Movie(models.Model):
     title = models.CharField(max_length=100)
     plot = models.TextField(blank=True)
     release_date = models.CharField(max_length=100)
-    poster = models.ImageField(upload_to='posters/%d/%m/%Y')
+    poster = models.ImageField(upload_to='movie_posters')
+    trailer = models.FileField(upload_to='movie_trailers', blank=True)
     create_time = models.DateTimeField(auto_now_add=True, null=True)
     actors = models.ManyToManyField(Actor, related_name='movies') # related_name is for finding each actors movies (actor.movies)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='movies')
