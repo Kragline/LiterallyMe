@@ -50,13 +50,14 @@
                                     </li>
                                 {% endif %}
                             </ul>
-                        {% block search %}
-                        {% endblock %}
+
                     </div>
                 </div>
             </nav>
         </header>
         <main>
+            {% block search %}
+            {% endblock %}
             <div class="content">
                 {% block content %}
                 {% endblock %}

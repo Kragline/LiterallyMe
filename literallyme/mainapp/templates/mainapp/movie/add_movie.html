@@ -15,7 +15,7 @@
 
         {% for f in form %}
             <div class="mb-3">
-                <label for="{{ f.is_for_label }}" class="form-label">{{ f.label }}</label>
+                <label for="{{ f.is_for_label }}" class="form-check-label">{{ f.label }}</label>
                 {{ f }}
 
                 {% if f.errors %}

@@ -35,7 +35,7 @@ def about_movie_view(request, movie_slug):
     # if we don't do that django will do it for every comment when we check is user authenticated, is he the author etc
     # the same will be done in about_comment_view
     comments = movie.comments.all().select_related('author').order_by('-create_time')
-    categories = Category.objects.annotate(movies_count=Count('movies'))
+    categories = DataMixin.get_categories()
 
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
@@ -112,14 +112,23 @@ class DeleteMovieView(LoginRequiredMixin, DataMixin, DeleteView):
 
 def search_for_movies_view(request):
     query = request.POST['movie-search']
+    search_mode = request.POST['search-mode']
 
     context = {
-        'title': 'Results for ' + str(query).capitalize()
+        'title': 'Invalid search, type something in search input!'
     }
 
+    user_menu = menu.copy()
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        user_menu = [user_menu[0]]
+
+    categories = DataMixin.get_categories()
     if query:
-        movies = Movie.objects.filter(title__contains=query)
+        movies = Movie.objects.filter(title__contains=query).order_by(search_mode)
         context.update({
+            'title': 'Results for ' + str(query).capitalize(),
+            'menu': user_menu,
+            'categories': categories,
             'query': query,
             'movies': movies
         })
@@ -206,14 +215,23 @@ class DeleteActorView(LoginRequiredMixin, DataMixin, DeleteView):
 
 def search_for_actors_view(request):
     query = request.POST['actor-search']
+    search_mode = request.POST['search-mode']
 
     context = {
-        'title': 'Results for ' + str(query).capitalize()
+        'title': 'Invalid search, type something in search input!'
     }
 
-    if query:
-        actors = Actor.objects.filter(name__contains=query)
+    user_menu = menu.copy()
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        user_menu = [user_menu[0]]
+
+    categories = DataMixin.get_categories()
+    if query != '':
+        actors = Actor.objects.filter(name__contains=query).order_by(search_mode)
         context.update({
+            'title': 'Results for ' + str(query).capitalize(),
+            'menu': user_menu,
+            'categories': categories,
             'query': query,
             'actors': actors
         })
@@ -262,7 +280,7 @@ def about_comment_view(request, movie_slug, comment_id):
     comment = Comment.objects.get(pk=comment_id)
     # explanation of .select_related('author') in about_movie_view
     comment_answers = comment.comment_answers.all().select_related('author').order_by('-create_time')
-    categories = Category.objects.annotate(movies_count=Count('movies'))
+    categories = DataMixin.get_categories()
 
     if request.method == 'POST':
         comment_form = CommentAnswerForm(request.POST)

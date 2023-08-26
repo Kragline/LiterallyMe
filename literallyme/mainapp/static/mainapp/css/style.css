@@ -3,6 +3,11 @@
     margin: 0 auto;
 }
 
+.search {
+    float: right;
+    margin: 10px 20px 0 0;
+}
+
 .d-flex {
     margin-bottom: 0px;
 }

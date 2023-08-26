@@ -13,8 +13,12 @@ menu = [
 class DataMixin:
     paginate_by = 6
 
+    @classmethod
+    def get_categories(cls):
+        return Category.objects.annotate(movies_count=Count('movies'))  # creating new column called movies_count
+
     def get_user_context(self, **kwargs):
-        categories = Category.objects.annotate(movies_count=Count('movies'))  # creating new column called movies_count
+        categories = self.get_categories()
 
         user_menu = menu.copy()
         if not self.request.user.is_authenticated or not self.request.user.is_superuser:

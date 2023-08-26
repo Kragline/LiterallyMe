@@ -1,15 +1,27 @@
 from django.contrib import admin
+from django.utils.safestring import mark_safe
+
 from .models import *
 
 
 class ActorAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'photo', 'create_time')
+    list_display = ('id', 'name', 'get_html_photo', 'create_time')
     list_display_links = ('id', 'name')
     
     search_fields = ('name',)
     list_filter = ('create_time',)
-    # sets slug automatucly
     prepopulated_fields = {'slug': ('name',)}
+
+    fields = ('name', 'bio', 'photo', 'slug', 'get_html_photo', 'create_time')
+    readonly_fields = ('get_html_photo', 'create_time')
+
+    save_on_top = True
+
+    def get_html_photo(self, model_object):
+        if model_object.photo:
+            return mark_safe(f'<img src="{model_object.photo.url}" width=70">')
+
+    get_html_photo.short_description = 'Photo'
 
 
 class MovieAdmin(admin.ModelAdmin):
@@ -18,8 +30,19 @@ class MovieAdmin(admin.ModelAdmin):
 
     search_fields = ('title',)
     list_filter = ('create_time',)
-    # sets slug automatucly
     prepopulated_fields = {'slug': ('title',)}
+
+    fields = ('title', 'plot', 'release_date', 'poster', 'get_html_photo',
+              'trailer', 'actors', 'category', 'rating', 'slug', 'create_time')
+    readonly_fields = ('get_html_photo', 'create_time')
+
+    save_on_top = True
+
+    def get_html_photo(self, model_object):
+        if model_object.poster:
+            return mark_safe(f'<img src="{model_object.poster.url}" width=70">')
+
+    get_html_photo.short_description = 'Poster'
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -27,7 +50,6 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'name')
 
     search_fields = ('name',)
-    # sets slug automatucly
     prepopulated_fields = {'slug': ('name',)}
 
 
@@ -46,3 +68,6 @@ admin.site.register(Movie, MovieAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(CommentAnswer, CommentAnswerAdmin)
+
+admin.site.site_title = 'Literally Me Administration'
+admin.site.site_header = 'Literally Me Administration'
