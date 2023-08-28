@@ -1,4 +1,3 @@
-from django.http import HttpResponseNotFound
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
@@ -9,7 +8,6 @@ from django.db.models import Count
 
 from .forms import *
 from .utils import *
-
 
 '''                 ****    Movie   ****                   '''
 
@@ -110,32 +108,6 @@ class DeleteMovieView(LoginRequiredMixin, DataMixin, DeleteView):
         return dict(list(context.items()) + list(mixin_context.items()))
 
 
-def search_for_movies_view(request):
-    query = request.POST['movie-search']
-    search_mode = request.POST['search-mode']
-
-    context = {
-        'title': 'Invalid search, type something in search input!'
-    }
-
-    user_menu = menu.copy()
-    if not request.user.is_authenticated or not request.user.is_superuser:
-        user_menu = [user_menu[0]]
-
-    categories = DataMixin.get_categories()
-    if query:
-        movies = Movie.objects.filter(title__contains=query).order_by(search_mode)
-        context.update({
-            'title': 'Results for ' + str(query).capitalize(),
-            'menu': user_menu,
-            'categories': categories,
-            'query': query,
-            'movies': movies
-        })
-
-    return render(request, 'mainapp/movie/movie_search.html', context=context)
-
-
 '''                 ****    Actor   ****                   '''
 
 
@@ -211,32 +183,6 @@ class DeleteActorView(LoginRequiredMixin, DataMixin, DeleteView):
         mixin_context = self.get_user_context(title='Delete actor')
 
         return dict(list(context.items()) + list(mixin_context.items()))
-
-
-def search_for_actors_view(request):
-    query = request.POST['actor-search']
-    search_mode = request.POST['search-mode']
-
-    context = {
-        'title': 'Invalid search, type something in search input!'
-    }
-
-    user_menu = menu.copy()
-    if not request.user.is_authenticated or not request.user.is_superuser:
-        user_menu = [user_menu[0]]
-
-    categories = DataMixin.get_categories()
-    if query != '':
-        actors = Actor.objects.filter(name__contains=query).order_by(search_mode)
-        context.update({
-            'title': 'Results for ' + str(query).capitalize(),
-            'menu': user_menu,
-            'categories': categories,
-            'query': query,
-            'actors': actors
-        })
-
-    return render(request, 'mainapp/actor/actor_search.html', context=context)
 
 
 '''                 ****    Category   ****                   '''
@@ -364,7 +310,8 @@ class UpdateCommentAnswerView(LoginRequiredMixin, DataMixin, UpdateView):
         return dict(list(context.items()) + list(mixin_context.items()))
 
     def get_success_url(self):
-        return reverse_lazy('about_comment', kwargs={'movie_slug': self.object.parent_comment.movie.slug, 'comment_id': self.object.parent_comment.pk})
+        return reverse_lazy('about_comment', kwargs={'movie_slug': self.object.parent_comment.movie.slug,
+                                                     'comment_id': self.object.parent_comment.pk})
 
 
 class DeleteCommentAnswerView(LoginRequiredMixin, DataMixin, DeleteView):
@@ -381,10 +328,46 @@ class DeleteCommentAnswerView(LoginRequiredMixin, DataMixin, DeleteView):
         return dict(list(context.items()) + list(mixin_context.items()))
 
     def get_success_url(self):
-        return reverse_lazy('about_comment', kwargs={'movie_slug': self.object.parent_comment.movie.slug, 'comment_id': self.object.parent_comment.pk})
+        return reverse_lazy('about_comment', kwargs={'movie_slug': self.object.parent_comment.movie.slug,
+                                                     'comment_id': self.object.parent_comment.pk})
 
 
-# works only if DEBUG in settings.py is False
-# and ALLOWED_HOSTS is ['127.0.0.1'] for example
-def page_not_found(reqest, exception):
-    return HttpResponseNotFound(f'<h1>Cant found that page</h1>')
+'''                 ****    Searches   ****                   '''
+
+
+def search_for_model(request, model, searcher):
+    query = request.POST[searcher]
+    search_mode = request.POST['search-mode']
+
+    categories = DataMixin.get_categories()
+    result = model.objects.order_by(search_mode)
+    if query != '':
+        if model == Movie:
+            result = result.filter(title__contains=query)
+        else:
+            result = result.filter(name__contains=query)
+
+    user_menu = menu.copy()
+    if not request.user.is_authenticated or not request.user.is_superuser:
+        user_menu = [user_menu[0]]
+
+    context = {
+        'title': 'Results of search',
+        'menu': user_menu,
+        'categories': categories,
+        model.__name__.lower() + 's': result
+    }
+
+    return context
+
+
+def search_for_movies_view(request):
+    context = search_for_model(request, Movie, 'movie-search')
+
+    return render(request, 'mainapp/movie/movie_search.html', context=context)
+
+
+def search_for_actors_view(request):
+    context = search_for_model(request, Actor, 'actor-search')
+
+    return render(request, 'mainapp/actor/actor_search.html', context=context)
