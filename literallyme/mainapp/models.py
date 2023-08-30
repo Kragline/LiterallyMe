@@ -2,9 +2,9 @@ from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
 
+import datetime
 
-# all slugs are setted automatucly
-# view in admin.py
+
 class Actor(models.Model):
     name = models.CharField(max_length=100)
     bio = models.TextField(blank=True)
@@ -47,10 +47,10 @@ class Category(models.Model):
 class Movie(models.Model):
     title = models.CharField(max_length=100)
     plot = models.TextField(blank=True)
-    release_date = models.CharField(max_length=100)
+    release_date = models.DateField(default=datetime.date.today, null=True)
     poster = models.ImageField(upload_to='movie_posters')
     trailer = models.FileField(upload_to='movie_trailers', blank=True)
-    create_time = models.DateTimeField(auto_now_add=True, null=True)
+    create_time = models.DateTimeField(auto_now_add=True)
     actors = models.ManyToManyField(Actor, related_name='movies') # related_name is for finding each actors movies (actor.movies)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='movies')
     rating = models.IntegerField(default=1, blank=True)

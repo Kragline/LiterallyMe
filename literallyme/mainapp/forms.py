@@ -11,7 +11,7 @@ file_attrs = {'type': 'file', 'class': 'form-control'}
 
 title_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Movie name'}
 plot_attrs = {'type': 'text', 'class': 'form-control', 'cols': 70, 'placeholder': 'Movie plot'}
-release_date_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Release date'}
+release_date_attrs = {'type': 'date', 'class': 'form-control'}
 rating_attrs = {'type': 'number', 'class': 'form-control', 'placeholder': 'Movie rating (1-10)'}
 select_attrs = {'class': 'form-select'}
 
@@ -19,7 +19,7 @@ category_name_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': '
 
 comment_attrs = {'type': 'text', 'class': 'form-control', 'cols': 70, 'rows': 1, 'placeholder': 'Add your comment'}
 
-comment_answer_attrs = {'type': 'text', 'class': 'form-control', 'cols': 70, 'rows': 1, 'placeholder': 'Write your answer'}
+comment_answer_attrs = {'type': 'text', 'class': 'form-control', 'cols': 70, 'rows': 1, 'placeholder': 'Answer'}
 
 
 class ActorForm(forms.ModelForm):
@@ -54,7 +54,7 @@ class MovieForm(forms.ModelForm):
         widgets = {
             'title': forms.TextInput(attrs=title_attrs),
             'plot': forms.Textarea(attrs=plot_attrs),
-            'release_date': forms.TextInput(attrs=release_date_attrs),
+            'release_date': forms.DateInput(attrs=release_date_attrs),
             'trailer': forms.FileInput(attrs=file_attrs),
             'poster': forms.FileInput(attrs=file_attrs),
             'slug': forms.TextInput(attrs=slug_attrs),
