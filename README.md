@@ -1,3 +1,5 @@
-Before runung install this
+Requirements:
 
-pip install django django-debug-toolbar pillow
+1) Django
+2) Django debug toolbar
+3) Pillow
