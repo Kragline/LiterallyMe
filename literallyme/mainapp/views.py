@@ -336,8 +336,8 @@ class DeleteCommentAnswerView(LoginRequiredMixin, DataMixin, DeleteView):
 
 
 def search_for_model(request, model, searcher):
-    query = request.POST[searcher]
-    search_mode = request.POST['search-mode']
+    query = request.GET[searcher]
+    search_mode = request.GET['search-mode']
 
     categories = DataMixin.get_categories()
     result = model.objects.order_by(search_mode)
