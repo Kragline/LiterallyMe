@@ -9,7 +9,6 @@
             {% csrf_token %}
             <div class="d-flex mb-2">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="actor-search">
-                <button class="btn btn-outline-primary" type="submit">Search</button>
             </div>
 
             <div class="form-check">
@@ -35,6 +34,9 @@
                         <path fill-rule="evenodd" d="M8 1a.5.5 0 0 1 .5.5v11.793l3.146-3.147a.5.5 0 0 1 .708.708l-4 4a.5.5 0 0 1-.708 0l-4-4a.5.5 0 0 1 .708-.708L7.5 13.293V1.5A.5.5 0 0 1 8 1z"/>
                     </svg>A
                 </label>
+            </div>
+            <div class="d-grid gap-2">
+                <button class="btn btn-outline-primary mt-2" type="submit">Filter</button>
             </div>
         </form>
     </div>
