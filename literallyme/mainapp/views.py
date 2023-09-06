@@ -24,7 +24,17 @@ class MovieListView(DataMixin, ListView):
         return dict(list(context.items()) + list(mixin_context.items()))
 
     def get_queryset(self):
-        return Movie.objects.order_by('create_time')
+        query = self.request.GET.get('movie-search')
+        search_mode = self.request.GET.get('search-mode')
+        queryset = Movie.objects.order_by('create_time')
+
+        if self.request.method == 'GET':
+            if query is not None:
+                queryset = queryset.filter(title__contains=query)
+            if search_mode:
+                queryset = queryset.order_by(search_mode)
+
+        return queryset
 
 
 def about_movie_view(request, movie_slug):
@@ -123,7 +133,17 @@ class ActorsListView(DataMixin, ListView):
         return dict(list(context.items()) + list(mixin_context.items()))
 
     def get_queryset(self):
-        return Actor.objects.order_by('create_time')
+        query = self.request.GET.get('actor-search')
+        search_mode = self.request.GET.get('search-mode')
+        queryset = Actor.objects.order_by('create_time')
+
+        if self.request.method == 'GET':
+            if query is not None:
+                queryset = queryset.filter(name__contains=query)
+            if search_mode:
+                queryset = queryset.order_by(search_mode)
+
+        return queryset
 
 
 class AboutActorView(DataMixin, DetailView):
@@ -330,44 +350,3 @@ class DeleteCommentAnswerView(LoginRequiredMixin, DataMixin, DeleteView):
     def get_success_url(self):
         return reverse_lazy('about_comment', kwargs={'movie_slug': self.object.parent_comment.movie.slug,
                                                      'comment_id': self.object.parent_comment.pk})
-
-
-'''                 ****    Searches   ****                   '''
-
-
-def search_for_model(request, model, searcher):
-    query = request.GET[searcher]
-    search_mode = request.GET['search-mode']
-
-    categories = DataMixin.get_categories()
-    result = model.objects.order_by(search_mode)
-    if query != '':
-        if model == Movie:
-            result = result.filter(title__contains=query)
-        else:
-            result = result.filter(name__contains=query)
-
-    user_menu = menu.copy()
-    if not request.user.is_authenticated or not request.user.is_superuser:
-        user_menu = [user_menu[0]]
-
-    context = {
-        'title': 'Results of search',
-        'menu': user_menu,
-        'categories': categories,
-        model.__name__.lower() + 's': result
-    }
-
-    return context
-
-
-def search_for_movies_view(request):
-    context = search_for_model(request, Movie, 'movie-search')
-
-    return render(request, 'mainapp/movie/movie_search.html', context=context)
-
-
-def search_for_actors_view(request):
-    context = search_for_model(request, Actor, 'actor-search')
-
-    return render(request, 'mainapp/actor/actor_search.html', context=context)

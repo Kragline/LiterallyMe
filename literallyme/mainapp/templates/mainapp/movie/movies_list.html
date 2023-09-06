@@ -3,13 +3,13 @@
 
 {% block search %}
     <div class="search">
-        <form role="search" action="{% url 'movie_search' %}" method="GET">
+        <form role="search" action="{% url 'home' %}" method="GET">
             <div class="mb-2">
                 <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="movie-search">
             </div>
 
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="search-mode" value="pk" id="flexRadioDefault1" checked>
+                <input class="form-check-input" type="radio" name="search-mode" value="create_time" id="flexRadioDefault1" checked>
                 <label class="form-check-label" for="flexRadioDefault2">
                     By Default
                 </label>

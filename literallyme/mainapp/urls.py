@@ -29,8 +29,4 @@ urlpatterns = [
     # Comment answer
     path('comment_answer/<int:comment_answer_id>/update/', UpdateCommentAnswerView.as_view(), name='update_comment_answer'),
     path('comment_answer/<int:comment_answer_id>/delete/', DeleteCommentAnswerView.as_view(), name='delete_comment_answer'),
-
-    # search views
-    path('search-movie', search_for_movies_view, name='movie_search'),
-    path('search-actor', search_for_actors_view, name='actor_search'),
 ]
