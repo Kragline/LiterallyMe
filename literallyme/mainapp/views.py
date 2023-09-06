@@ -37,39 +37,32 @@ class MovieListView(DataMixin, ListView):
         return queryset
 
 
-def about_movie_view(request, movie_slug):
-    movie = Movie.objects.get(slug=movie_slug)
-    # using select_related('author') to optimize query and grab author of every comment automatically
-    # if we don't do that django will do it for every comment when we check is user authenticated, is he the author etc
-    # the same will be done in about_comment_view
-    comments = movie.comments.all().select_related('author').order_by('-create_time')
-    categories = DataMixin.get_categories()
+class AboutMovieView(DataMixin, DetailView):
+    model = Movie
+    template_name = 'mainapp/movie/about_movie.html'
+    context_object_name = 'movie'
+    slug_url_kwarg = 'movie_slug'
 
-    if request.method == 'POST':
-        comment_form = CommentForm(request.POST)
-        if comment_form.is_valid():
-            new_comment = comment_form.save(commit=False)
-            new_comment.movie = movie
-            new_comment.author = request.user
-            new_comment.save()
+    def post(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            comment_form = CommentForm(request.POST)
+            if comment_form.is_valid():
+                new_comment = comment_form.save(commit=False)
+                new_comment.movie = self.get_object()
+                new_comment.author = request.user
+                new_comment.save()
 
-            return redirect(movie.get_absolute_url())
-    else:
-        comment_form = CommentForm()
+                return redirect(self.get_object().get_absolute_url())
+        else:
+            comment_form = CommentForm()
 
-    user_menu = menu.copy()
-    if not request.user.is_authenticated or not request.user.is_superuser:
-        user_menu = [user_menu[0]]
+        return reverse_lazy('about_movie', kwargs={'movie_slug': self.get_object().slug})
 
-    context = {
-        'menu': user_menu,
-        'categories': categories,
-        'movie': movie,
-        'comments': comments,
-        'form': comment_form
-    }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        mixin_context = self.get_user_context(form=CommentForm(), comments=self.object.comments.all())
 
-    return render(request, 'mainapp/movie/about_movie.html', context=context)
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
 class AddMovieView(LoginRequiredMixin, DataMixin, CreateView):
