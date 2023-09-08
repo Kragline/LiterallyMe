@@ -70,7 +70,7 @@
                             {% for comment in comments %}
                                 <div class="card mb-3">
                                     <div class="card-header">
-                                        <h5 class="card-title">{{ comment.author }}</h5>
+                                        <h5 class="card-title"><a class="movie-link" href="{% url 'profile_page' comment.author.username %}">{{ comment.author }}</a></h5>
                                     </div>
                                     <div class="card-body">
                                         <p class="card-text">{{ comment.text }}</p>
@@ -81,9 +81,7 @@
                                                      | <a class="movie-link" href="{{ comment.get_absolute_url_for_update }}">Update</a> |
                                                     <a class="movie-link" href="{{ comment.get_absolute_url_for_delete }}">Delete</a>
                                                 {% endif %}
-
                                             {% endif %}
-
                                         </p>
                                     </div>
                                     <div class="card-footer text-end">

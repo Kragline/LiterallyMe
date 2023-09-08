@@ -6,7 +6,7 @@
 
     <div class="card border-success mb-3">
         <div class="card-header">
-            <h5 class="card-title">{{ comment.author }}</h5>
+            <h5 class="card-title"><a class="movie-link" href="{% url 'profile_page' comment.author.username %}">{{ comment.author }}</a></h5>
         </div>
         <div class="card-body">
             <p class="card-text">{{ comment.text }}</p>
@@ -31,7 +31,7 @@
                 {% for com_answ in comment_answers %}
                     <div class="card mb-3">
                         <div class="card-header">
-                            <h5 class="card-title">{{ com_answ.author }}</h5>
+                            <h5 class="card-title"><a class="movie-link" href="{% url 'profile_page' comment.author.username %}">{{ com_answ.author }}</a></h5>
                         </div>
                         <div class="card-body">
                             <p class="card-text">{{ com_answ.text }}</p>

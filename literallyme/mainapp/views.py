@@ -1,4 +1,4 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
@@ -60,7 +60,7 @@ class AboutMovieView(DataMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        mixin_context = self.get_user_context(form=CommentForm(), comments=self.object.comments.all())
+        mixin_context = self.get_user_context(form=CommentForm(), comments=self.object.comments.order_by('-create_time'))
 
         return dict(list(context.items()) + list(mixin_context.items()))
 

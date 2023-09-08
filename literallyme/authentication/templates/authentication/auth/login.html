@@ -12,7 +12,7 @@
         {% endif %}
         {% for f in form %}
             <div class="mb-3">
-                <label for="{{ f.is_for_label }}" class="form-label">{{ f.label }}</label>
+                <label for="{{ f.id_for_label }}" class="form-label">{{ f.label }}</label>
                 {{ f }}
                 {% if f.errors %}
                 <div class="alert alert-warning post" role="alert">
@@ -21,6 +21,6 @@
                 {% endif %}
             </div>
         {% endfor %}
-        <button type="submit" class="btn btn-primary">Register</button>
+        <button type="submit" class="btn btn-outline-primary">Login</button>
     </form>
 {% endblock %}

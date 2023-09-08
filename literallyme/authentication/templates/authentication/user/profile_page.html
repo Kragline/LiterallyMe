@@ -1,0 +1,31 @@
+{% extends 'mainapp/base.html' %}
+
+{% block content %}
+    <div class="card border-primary mb-3 mt-3">
+        <div class="card-header">
+            <h1 class="actor-bold">{{ user_info.username }}</h1>
+            <p class="card-text">
+                {% if user_info.last_name %} {{ user_info.first_name }} {% endif %} {% if user_info.last_name %} {{ user_info.last_name }} {% endif %}
+            </p>
+            {% if user_info.is_staff %}
+                <h5 class="card-title actor-bold">Superuser</h5>
+            {% elif user_info.is_superuser %}
+                <h5 class="card-title actor-bold">Staff</h5>
+            {% else %}
+                <h5 class="card-title actor-bold">Usual user</h5>
+            {% endif %}
+            <div class="text-end">
+                {% if request.user == user_info %}
+                    <p class="card-text">
+                        <a class="actor-link" href="#">Change avatar</a> |
+                        <a class="actor-link" href="{% url 'update_user' user_info.username %}">Update</a> |
+                        <a class="actor-link" href="{% url 'delete_user' user_info.username %}">Delete</a>
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card-footer text-end">
+            <small class="text-body-secondary">Joined at: {{ user_info.date_joined|date:"d.m.Y" }}</small>
+        </div>
+    </div>
+{% endblock %}
