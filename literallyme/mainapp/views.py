@@ -234,38 +234,34 @@ class AddCategoryView(LoginRequiredMixin, DataMixin, CreateView):
 '''                 ****    Comment   ****                   '''
 
 
-def about_comment_view(request, movie_slug, comment_id):
-    movie = Movie.objects.get(slug=movie_slug)
-    comment = Comment.objects.get(pk=comment_id)
-    # explanation of .select_related('author') in about_movie_view
-    comment_answers = comment.comment_answers.all().select_related('author').order_by('-create_time')
-    categories = DataMixin.get_categories()
+class AboutCommentView(LoginRequiredMixin, DataMixin, DetailView):
+    model = Comment
+    template_name = 'mainapp/comment/about_comment.html'
+    pk_url_kwarg = 'comment_id'
+    slug_url_kwarg = 'movie_slug'
+    success_url = reverse_lazy('home')
+    login_url = reverse_lazy('home')
 
-    if request.method == 'POST':
-        comment_form = CommentAnswerForm(request.POST)
-        if comment_form.is_valid():
-            new_comment = comment_form.save(commit=False)
-            new_comment.parent_comment = comment
-            new_comment.author = request.user
-            new_comment.save()
+    def post(self, request, *args, **kwargs):
+        if self.request.method == 'POST':
+            comment_form = CommentAnswerForm(self.request.POST)
+            if comment_form.is_valid():
+                new_comment = comment_form.save(commit=False)
+                new_comment.parent_comment = self.get_object()
+                new_comment.author = request.user
+                new_comment.save()
 
-            return redirect(comment.get_absolute_url())
-    else:
-        comment_form = CommentAnswerForm()
+                return redirect(self.get_object().get_absolute_url())
+        else:
+            comment_form = CommentAnswerForm()
 
-    user_menu = menu.copy()
-    if not request.user.is_authenticated or not request.user.is_superuser:
-        user_menu = [user_menu[0]]
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        mixin_context = self.get_user_context(form=CommentAnswerForm(), comment=self.get_object(),
+                                              title=f'About comment under {self.get_object().movie.title}',
+                                              comment_answers=self.get_object().comment_answers.all().select_related('author').order_by('-create_time'))
 
-    context = {
-        'menu': user_menu,
-        'categories': categories,
-        'title': f'About comment under {movie.title}',
-        'comment': comment,
-        'comment_answers': comment_answers,
-        'form': comment_form
-    }
-    return render(request, 'mainapp/comment/about_comment.html', context=context)
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
 class UpdateCommentView(LoginRequiredMixin, DataMixin, UpdateView):

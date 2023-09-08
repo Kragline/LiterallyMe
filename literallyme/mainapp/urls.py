@@ -22,7 +22,7 @@ urlpatterns = [
     path('add_category/', AddCategoryView.as_view(), name='add_category'),
 
     # Comment
-    path('movie/<slug:movie_slug>/comment/<int:comment_id>/about/', about_comment_view, name='about_comment'),
+    path('movie/<slug:movie_slug>/comment/<int:comment_id>/about/', AboutCommentView.as_view(), name='about_comment'),
     path('movie/<slug:movie_slug>/comment/<int:comment_id>/update/', UpdateCommentView.as_view(), name='update_comment'),
     path('movie/<slug:movie_slug>/comment/<int:comment_id>/delete/', DeleteCommentView.as_view(), name='delete_comment'),
 
