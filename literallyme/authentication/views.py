@@ -2,13 +2,15 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect, render
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import logout, login
-from django.views.generic import CreateView, DetailView, DeleteView
+from django.views.generic import CreateView, DetailView, DeleteView, UpdateView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-from .forms import *
+from .forms import RegisterUserForm, LoginUserForm, UpdateUserForm, CustomProfileForm
+from .models import CustomProfile
+
 from mainapp.utils import *
 
 
@@ -18,6 +20,8 @@ class RegisterUserView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
+        # that pic is in base dir media dir
+        CustomProfile.objects.create(user=user, profile_pic='/authentication/img/default_profile_pic.jpg')
         login(self.request, user)
 
         return redirect('home')
@@ -83,3 +87,21 @@ class UserDeleteView(DataMixin, LoginRequiredMixin, DeleteView):
         mixin_context = self.get_user_context(title=f'Delete account {self.object.username}')
 
         return dict(list(context.items()) + list(mixin_context.items()))
+
+
+class ChangeProfilePicView(DataMixin, LoginRequiredMixin, UpdateView):
+    model = CustomProfile
+    form_class = CustomProfileForm
+    template_name = 'authentication/custom_profile/change_profile_pic.html'
+    context_object_name = 'form'
+    login_url = reverse_lazy('home')
+    pk_url_kwarg = 'user_id'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        mixin_context = self.get_user_context(title='Change profile pic')
+
+        return dict(list(context.items()) + list(mixin_context.items()))
+
+    def get_success_url(self):
+        return reverse_lazy('profile_page', kwargs={'username': self.object.user.username})

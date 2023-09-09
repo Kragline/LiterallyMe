@@ -70,7 +70,12 @@
                             {% for comment in comments %}
                                 <div class="card mb-3">
                                     <div class="card-header">
-                                        <h5 class="card-title"><a class="movie-link" href="{% url 'profile_page' comment.author.username %}">{{ comment.author }}</a></h5>
+                                        <h5 class="card-title username-in-comment">
+                                            {% if comment.author.custom_profile.profile_pic %}
+                                                <img width="40" class="img-fluid rounded-circle" src="{{ comment.author.custom_profile.profile_pic.url }}">
+                                            {% endif %}
+                                            <a class="movie-link" href="{% url 'profile_page' comment.author.username %}">{{ comment.author }}</a>
+                                        </h5>
                                     </div>
                                     <div class="card-body">
                                         <p class="card-text">{{ comment.text }}</p>

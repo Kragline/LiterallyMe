@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.models import User
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+
+from .models import CustomProfile
 
 
 username_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Username'}
@@ -9,6 +11,8 @@ password_attrs = {'type': 'password', 'class': 'form-control', 'placeholder': 'P
 
 first_name_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'First name'}
 last_name_attrs = {'type': 'text', 'class': 'form-control', 'placeholder': 'Last name'}
+
+file_attrs = {'type': 'file', 'class': 'form-control'}
 
 
 class RegisterUserForm(UserCreationForm):
@@ -36,3 +40,13 @@ class UpdateUserForm(forms.ModelForm):
 class LoginUserForm(AuthenticationForm):
     username = forms.CharField(label='Username', widget=forms.TextInput(attrs=username_attrs))
     password = forms.CharField(label='Password', widget=forms.PasswordInput(attrs=password_attrs))
+
+
+class CustomProfileForm(forms.ModelForm):
+    class Meta:
+        model = CustomProfile
+        fields = ['profile_pic']
+
+        widgets = {
+            'profile_pic': forms.FileInput(attrs=file_attrs)
+        }

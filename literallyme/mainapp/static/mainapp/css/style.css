@@ -43,3 +43,7 @@
 .not-centered {
     width: 100%;
 }
+
+.username-in-comment {
+    margin-bottom: 0px;
+}
