@@ -9,7 +9,7 @@
   <div class="card-body">
       <p class="card-text">{{ comment.text }}</p>
 
-      <form method="post">
+      <form method="post" class="mt-2 mb-0">
           {% csrf_token %}
           <button type="submit" class="btn btn-outline-danger" value="Yes">Yes, delete</button>
       </form>

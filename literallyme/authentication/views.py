@@ -7,32 +7,43 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-
 from .forms import RegisterUserForm, LoginUserForm, UpdateUserForm, CustomProfileForm
 from .models import CustomProfile
 
 from mainapp.utils import *
 
 
-class RegisterUserView(CreateView):
+class RegisterUserView(DataMixin, CreateView):
     form_class = RegisterUserForm
     template_name = 'authentication/auth/register.html'
 
     def form_valid(self, form):
         user = form.save()
-        # that pic is in base dir media dir
-        CustomProfile.objects.create(user=user, profile_pic='/authentication/img/default_profile_pic.jpg')
+        # that pic is in projects media directory
+        CustomProfile.objects.create(user=user, profile_pic='default_profile_pic.jpg')
         login(self.request, user)
 
         return redirect('home')
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        mixin_context = self.get_user_context(title='Registration')
 
-class LoginUserView(LoginView):
+        return dict(list(context.items()) + list(mixin_context.items()))
+
+
+class LoginUserView(DataMixin, LoginView):
     form_class = LoginUserForm
     template_name = 'authentication/auth/login.html'
 
     def get_success_url(self):
         return reverse_lazy('home')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        mixin_context = self.get_user_context(title='Login')
+
+        return dict(list(context.items()) + list(mixin_context.items()))
 
 
 def logout_user(request):
@@ -79,7 +90,7 @@ class UserDeleteView(DataMixin, LoginRequiredMixin, DeleteView):
     template_name = 'authentication/user/delete_user.html'
     slug_field = 'username'
     slug_url_kwarg = 'username'
-    success_url = reverse_lazy('home')
+    success_url = reverse_lazy('register')
     login_url = reverse_lazy('home')
 
     def get_context_data(self, **kwargs):

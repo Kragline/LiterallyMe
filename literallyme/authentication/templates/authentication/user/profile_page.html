@@ -20,8 +20,6 @@
                         <h5 class="card-title actor-bold">Superuser</h5>
                     {% elif user_info.is_superuser %}
                         <h5 class="card-title actor-bold">Staff</h5>
-                    {% else %}
-                        <h5 class="card-title actor-bold">Usual user</h5>
                     {% endif %}
                     {% if request.user == user_info %}
                         <hr>
@@ -30,6 +28,8 @@
                             <a class="actor-link" href="{% url 'update_user' user_info.username %}">Update</a> |
                             <a class="actor-link" href="{% url 'delete_user' user_info.username %}">Delete</a>
                         </p>
+                        <hr>
+                        <a class="actor-link" href="{% url 'logout' %}">Logout</a>
                     {% endif %}
                 </div>
             </div>
