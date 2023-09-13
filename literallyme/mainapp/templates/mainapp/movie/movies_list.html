@@ -1,5 +1,10 @@
 {% extends 'mainapp/base.html' %}
 {% load mainapp_tags %}
+{% load static %}
+
+{% block wallpaper %}
+    <img src="{% static 'mainapp/img/movies_list_wallpaper.jpeg' %}" class="img-fluid">
+{% endblock %}
 
 {% block search %}
     <div class="search">
@@ -63,7 +68,7 @@
                 </label>
             </div>
             <div class="d-grid gap-2">
-                <button class="btn btn-outline-success mt-2" type="submit">Filter</button>
+                <button class="btn btn-outline-success mt-2" type="submit">Find movie</button>
             </div>
         </form>
     </div>

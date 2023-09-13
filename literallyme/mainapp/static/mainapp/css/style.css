@@ -1,11 +1,17 @@
 .content {
-    max-width: 60%;
+    left: 20%;
+    top: 70%;
+    border-radius: 10px;
+    width: 60%;
+    background-color: white;
     margin: 0 auto;
+    padding: 15px;
+    padding-top: 10px;
 }
 
 .search {
-    float: right;
-    margin: 10px 20px 0 0;
+    float: left;
+    margin: 20px 0 0 20px;
 }
 
 .pagination {
