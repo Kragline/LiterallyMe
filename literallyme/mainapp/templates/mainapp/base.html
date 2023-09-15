@@ -59,8 +59,10 @@
             </nav>
         </header>
         <main>
-            <div class="position-relative">
+            <div class="main-div position-relative">
             {% block wallpaper %}
+            {% endblock %}
+            {% block search %}
             {% endblock %}
                 <div class="content position-absolute">
                     {% block content %}
@@ -91,8 +93,6 @@
                     {% endif %}
                 </div>
             </div>
-            {% block search %}
-            {% endblock %}
         </main>
     </body>
 </html>

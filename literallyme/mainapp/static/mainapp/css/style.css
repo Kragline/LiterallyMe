@@ -58,3 +58,49 @@
     width: 70%;
     margin: auto;
 }
+
+@media (max-width: 1200px) {
+    .search {
+        left: 20%;
+        top: 70%;
+        border-radius: 10px;
+        width: 60%;
+        background-color: white;
+        margin: 0 auto;
+        padding: 15px;
+    }
+
+    .content {
+        top: 125%;
+    }
+}
+
+@media (max-width: 1055px) {
+    .content {
+        top: 140%;
+    }
+}
+
+@media (max-width: 855px) {
+    .content {
+        top: 155%;
+    }
+}
+
+@media (max-width: 705px) {
+    .content {
+        top: 170%;
+    }
+}
+
+@media (max-width: 605px) {
+    .content {
+        top: 185%;
+    }
+}
+
+@media (max-width: 515px) {
+    .content {
+        top: 200%;
+    }
+}
