@@ -28,6 +28,14 @@
                             <a class="actor-link" href="{% url 'update_user' user_info.username %}">Update</a> |
                             <a class="actor-link" href="{% url 'delete_user' user_info.username %}">Delete</a>
                         </p>
+                        {% if user_info.is_staff or user_info.is_superuser %}
+                            <hr>
+                            <p class="card-text">
+                                <a class="actor-link" href="{% url 'add_movie' %}">Add movie</a> |
+                                <a class="actor-link" href="{% url 'add_actor' %}">Add actor</a> |
+                                <a class="actor-link" href="{% url 'add_category'  %}">Add category</a>
+                            </p>
+                        {% endif %}
                         <hr>
                         <a class="actor-link" href="{% url 'logout' %}">Logout</a>
                     {% endif %}

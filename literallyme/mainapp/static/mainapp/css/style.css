@@ -61,10 +61,10 @@
 
 @media (max-width: 1200px) {
     .search {
-        left: 20%;
+        left: 5%;
         top: 70%;
         border-radius: 10px;
-        width: 60%;
+        width: 90%;
         background-color: white;
         margin: 0 auto;
         padding: 15px;
@@ -72,6 +72,8 @@
 
     .content {
         top: 125%;
+        left: 5%;
+        width: 90%;
     }
 }
 
